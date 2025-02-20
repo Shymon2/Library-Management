@@ -103,6 +103,7 @@ public class UserService implements IUserService{
     @Override
     public UserInforResponse convertToInforResponse(User user) {
         return UserInforResponse.builder()
+                .username(user.getUsername())
                 .fullname(user.getFullname())
                 .identityNum(user.getIdentityNum())
                 .phoneNumber(user.getPhoneNumber())

@@ -25,6 +25,13 @@ public class SecurityConfig {
             "/user/newUser", "/auth/*", "/static/*", "/category/all"
     };
 
+    private static final String[] AUTH_WHITELIST = {
+      "/api/v1/auth/**",
+      "/v3/api-docs/**",
+      "v3/api-docs.yaml",
+      "/swagger-ui//**",
+      "/swagger-ui.html"
+    };
     @Value("${jwt.signerKey}")
     private String signerKey;
 
@@ -33,12 +40,16 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(request ->
                 request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated());
 
         httpSecurity.oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwtConfigurer ->
                         jwtConfigurer.decoder(jwtDecoder()).
-                                jwtAuthenticationConverter(jwtAuthenticationConverter())));
+                                jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+        );
+
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 

@@ -39,7 +39,7 @@ public class UserController {
     @Operation(summary = "Create new user")
     @PostMapping("/newUser")
     public ResponseData<UserInforResponse> createNewUser(@RequestBody UserDTO request){
-        return new ResponseData<>(HttpStatus.CREATED.value(), Translator.toLocale("user.create.success"), userService.createUser(request));
+        return new ResponseData<>(1000, Translator.toLocale("user.create.success"), userService.createUser(request));
     }
 
     @PreAuthorize(value = "hasRole('ADMIN') || hasAuthority(@roleService.getRoleForApi('library.user.updateUserInfor'))")
@@ -47,7 +47,7 @@ public class UserController {
     @PutMapping("/updateUserInfor/user")
     public ResponseData<UserInforResponse> updateUserInfor(@RequestBody UpdateUserDTO request,
                                                       @RequestParam Long userId){
-        return new ResponseData<>(HttpStatus.OK.value(), Translator.toLocale("user.upd.success"), userService.updateUser(request, userId));
+        return new ResponseData<>(1000, Translator.toLocale("user.upd.success"), userService.updateUser(request, userId));
     }
 
     @PreAuthorize(value = "hasRole('ADMIN') || hasAuthority(@roleService.getRoleForApi('library.user.deleteUserById'))")
