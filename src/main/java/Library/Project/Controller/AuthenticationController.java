@@ -4,6 +4,7 @@ import Library.Project.Configuration.Translator;
 import Library.Project.Service.AuthenticationService.AuthenticationService;
 import Library.Project.dto.Request.AuthenticationRequest;
 import Library.Project.dto.Request.IntrospectRequest;
+import Library.Project.dto.Request.LogoutRequest;
 import Library.Project.dto.Response.AuthenticationResponse;
 import Library.Project.dto.Response.IntrospectResponse;
 import Library.Project.dto.Response.ResponseData;
@@ -33,5 +34,11 @@ public class AuthenticationController {
     public ResponseData<IntrospectResponse> introspectToken(@RequestBody IntrospectRequest request)
             throws ParseException, JOSEException {
         return new ResponseData<>(1000, Translator.toLocale("introspect.done"), authenticationService.introspectToken(request));
+    }
+
+    @PostMapping("/logout")
+    public ResponseData<String> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
+        authenticationService.logout(request);
+        return new ResponseData<>(1000, Translator.toLocale("authentication.logout.success"));
     }
 }

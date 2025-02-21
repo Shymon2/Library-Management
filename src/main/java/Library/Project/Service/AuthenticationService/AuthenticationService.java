@@ -3,10 +3,13 @@ package Library.Project.Service.AuthenticationService;
 import Library.Project.Configuration.Translator;
 import Library.Project.Enums.ErrorCode;
 import Library.Project.Exception.ResourcesNotFoundException;
+import Library.Project.Model.InvalidatedToken;
 import Library.Project.Model.User;
+import Library.Project.Repository.InvalidatedTokenRepository;
 import Library.Project.Service.UserService.UserService;
 import Library.Project.dto.Request.AuthenticationRequest;
 import Library.Project.dto.Request.IntrospectRequest;
+import Library.Project.dto.Request.LogoutRequest;
 import Library.Project.dto.Response.AuthenticationResponse;
 import Library.Project.dto.Response.IntrospectResponse;
 import com.nimbusds.jose.*;
@@ -18,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cglib.transform.TransformingClassLoader;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,6 +37,7 @@ import java.util.*;
 @Slf4j
 public class AuthenticationService implements IAuthenticationService{
     private final UserService userService;
+    private final InvalidatedTokenRepository invalidatedTokenRepository;
 
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -67,18 +72,31 @@ public class AuthenticationService implements IAuthenticationService{
     @Override
     public IntrospectResponse introspectToken(IntrospectRequest request) throws JOSEException, ParseException {
         String token = request.getToken();
+        boolean status = true;
 
-        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
-
-        SignedJWT signedJWT = SignedJWT.parse(token);
-
-        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
-
-        boolean verified = signedJWT.verify(verifier);
+        try{
+            verifier(token);
+        } catch (RuntimeException e){
+            status = false;
+        }
 
         return IntrospectResponse.builder()
-                .valid(verified && expiryTime.after(new Date()))
+                .valid(status)
                 .build();
+    }
+
+    @Override
+    public void logout(LogoutRequest request) throws ParseException, JOSEException {
+
+        SignedJWT signToken = verifier(request.getToken());
+
+        String jit = signToken.getJWTClaimsSet().getJWTID();
+        Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
+
+        InvalidatedToken invalidatedToken =
+                InvalidatedToken.builder().id(jit).expiryTime(expiryTime).build();
+
+        invalidatedTokenRepository.save(invalidatedToken);
     }
 
     private String generateToken(User user){
@@ -100,9 +118,26 @@ public class AuthenticationService implements IAuthenticationService{
             jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
             return jwsObject.serialize();
         } catch (JOSEException e) {
-            log.error("Cannot create token", e);
-            throw new RuntimeException(e);
+            throw new RuntimeException(Translator.toLocale("authentication.token.fail"));
         }
+    }
+
+    private SignedJWT verifier(String token) throws JOSEException, ParseException {
+        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+
+        SignedJWT signedJWT = SignedJWT.parse(token);
+
+        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        boolean verified = signedJWT.verify(verifier);
+
+        if(!expiryTime.after(new Date()))
+            throw new RuntimeException(Translator.toLocale("authentication.verify.fail"));
+
+        if (invalidatedTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
+            throw new RuntimeException(Translator.toLocale("authentication.logout.already"));
+
+        return signedJWT;
     }
 
     private String buildScope(User user){
