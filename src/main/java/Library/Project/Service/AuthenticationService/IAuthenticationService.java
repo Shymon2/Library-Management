@@ -16,4 +16,6 @@ public interface IAuthenticationService {
 
     void logout(LogoutRequest token) throws ParseException, JOSEException;
 
+    void removeOverDateToken();
+
 }

@@ -36,9 +36,17 @@ public class AuthenticationController {
         return new ResponseData<>(1000, Translator.toLocale("introspect.done"), authenticationService.introspectToken(request));
     }
 
+    @Operation(summary = "Log out")
     @PostMapping("/logout")
     public ResponseData<String> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
         authenticationService.logout(request);
         return new ResponseData<>(1000, Translator.toLocale("authentication.logout.success"));
+    }
+
+    @Operation(summary = "Clean data of token db")
+    @DeleteMapping("/removeInvalidateToken")
+    public ResponseData<String> refreshDb(){
+        authenticationService.removeOverDateToken();
+        return new ResponseData<>(1000, Translator.toLocale("authentication.remove.token"));
     }
 }

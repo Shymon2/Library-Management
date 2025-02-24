@@ -99,6 +99,17 @@ public class AuthenticationService implements IAuthenticationService{
         invalidatedTokenRepository.save(invalidatedToken);
     }
 
+    @Override
+    public void removeOverDateToken(){
+        List<InvalidatedToken> invalidatedTokens = invalidatedTokenRepository.findAll();
+
+        invalidatedTokens.forEach(a -> {
+            if(a.getExpiryTime().after(new Date()))
+                invalidatedTokens.remove(a);
+        });
+    }
+
+
     private String generateToken(User user){
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
