@@ -22,7 +22,7 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableMethodSecurity
 public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS = {
-            "/user/newUser", "/auth/*", "/static/*", "/category/all"
+            "/user/newUser", "/auth/*", "/static/*", "/category/all", "/book/**"
     };
 
     private static final String[] AUTH_WHITELIST = {

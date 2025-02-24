@@ -36,9 +36,9 @@ public class UserController {
         return new ResponseData<>(1000, Translator.toLocale("user.get.success"), userService.getUserById(userId));
     }
 
-    @Operation(summary = "Create new user")
+    @Operation(summary = "Sign up", description = "Create new user")
     @PostMapping("/newUser")
-    public ResponseData<UserInforResponse> createNewUser(@RequestBody UserDTO request){
+    public ResponseData<UserInforResponse> signUp(@RequestBody UserDTO request){
         return new ResponseData<>(1000, Translator.toLocale("user.create.success"), userService.createUser(request));
     }
 
