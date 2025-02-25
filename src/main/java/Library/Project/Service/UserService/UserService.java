@@ -49,7 +49,7 @@ public class UserService implements IUserService{
     @Override
     public UserInforResponse createUser(UserDTO request) {
         return Optional.of(request)
-                .filter(user -> userRepository.existsByUsername(request.getUsername()))
+                .filter(user -> !userRepository.existsByUsername(request.getUsername()))
                 .map(req -> {
                     encoder = new BCryptPasswordEncoder(10);
                     User user = User.builder()
