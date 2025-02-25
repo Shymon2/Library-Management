@@ -10,6 +10,7 @@ import Library.Project.dto.Response.IntrospectResponse;
 import Library.Project.dto.Response.ResponseData;
 import com.nimbusds.jose.JOSEException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.text.ParseException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
+@SecurityRequirements
 @Tag(name = "Authentication Controller")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;

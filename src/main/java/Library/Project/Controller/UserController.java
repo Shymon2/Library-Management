@@ -8,6 +8,7 @@ import Library.Project.dto.Request.UserDTO;
 import Library.Project.dto.Response.ResponseData;
 import Library.Project.dto.Response.UserInforResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,7 @@ public class UserController {
     }
 
     @Operation(summary = "Sign up", description = "Create new user")
+    @SecurityRequirements
     @PostMapping("/newUser")
     public ResponseData<UserInforResponse> signUp(@RequestBody UserDTO request){
         return new ResponseData<>(1000, Translator.toLocale("user.create.success"), userService.createUser(request));
@@ -80,5 +82,10 @@ public class UserController {
         log.info("Username: {}", user.getName());
         user.getAuthorities().forEach(a -> log.info(a.getAuthority()));
         return new ResponseData<>(1000, Translator.toLocale("user.infor.show"), userService.convertToInforResponse(userFound));
+    }
+
+    @GetMapping("/userByRole")
+    public ResponseData<List<User>> getUserByRole(@RequestParam String role){
+        return new ResponseData<>(1000, "done", userService.getUserByRole(role));
     }
 }

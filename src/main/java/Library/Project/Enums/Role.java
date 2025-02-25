@@ -12,7 +12,6 @@ public enum Role{
 
     private final String[] permissions;
 
-
     Role(String[] permissions) {
         this.permissions = permissions;
     }

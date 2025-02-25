@@ -10,6 +10,8 @@ import Library.Project.dto.Response.ResponseData;
 import Library.Project.dto.Response.ResponseError;
 import Library.Project.Service.BookService.IBookService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -27,6 +29,7 @@ import java.util.List;
 @RequestMapping("/book")
 @Validated
 @RequiredArgsConstructor
+@SecurityRequirements
 @Tag(name = "Book Controller")
 public class BookController {
 
@@ -42,6 +45,7 @@ public class BookController {
 
     @PreAuthorize(value = "hasRole('ADMIN') || hasAuthority(@roleService.getRoleForApi('library.book.addNewBook'))")
     @Operation(summary = "Add new Book")
+    @SecurityRequirement(name = "BearerAuth")
     @PostMapping("/add")
     public ResponseData<Book> addNewBook(@Valid @RequestBody BookRequestDTO request) {
 
@@ -91,6 +95,7 @@ public class BookController {
 
     @PreAuthorize(value = "hasRole('ADMIN') || hasAuthority(@roleService.getRoleForApi('library.book.deleteBookById'))")
     @Operation(summary = "Delete book by Id")
+    @SecurityRequirement(name = "BearerAuth")
     @DeleteMapping("/delete")
     public ResponseData<Book> deleteBookById(@RequestParam Long id) {
 
@@ -102,6 +107,7 @@ public class BookController {
 
     @PreAuthorize(value = "hasRole('ADMIN') || hasAuthority(@roleService.getRoleForApi('library.book.updateBookById'))")
     @Operation(summary = "Update book by Id")
+    @SecurityRequirement(name = "BearerAuth")
     @PutMapping("/update")
     public ResponseData<Book> updateBookById(@RequestParam Long id, @Valid @RequestBody BookRequestDTO request) {
         Book book = bookService.updateBook(request, id);

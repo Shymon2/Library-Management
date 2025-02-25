@@ -21,6 +21,7 @@ public class SwaggerConfig {
                 .group("public")
                 .pathsToMatch(PUBLIC_ENDPOINTS)
                 .pathsToExclude("/book/update", "/book/add", "/book/delete")
+                .addOpenApiCustomizer(a -> a.getComponents().setSecuritySchemes(null))
                 .build();
     }
 
@@ -34,10 +35,16 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .info(new Info().title("Api documents"))
-                .addSecurityItem(new SecurityRequirement().addList("JavaInUseSecurityScheme"))
-                .components(new Components().addSecuritySchemes("JavaInUseSecurityScheme", new SecurityScheme()
-                        .name("JavaInUseSecurityScheme").type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")));
+        OpenAPI openAPI = new OpenAPI()
+                .info(new Info().title("JavaInUse Authentication Service"));
+
+        openAPI.addSecurityItem(new SecurityRequirement().addList("BearerAuth"))
+                .components(new Components().addSecuritySchemes("BearerAuth",
+                        new SecurityScheme().name("BearerAuth")
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")));
+
+        return openAPI;
     }
 }

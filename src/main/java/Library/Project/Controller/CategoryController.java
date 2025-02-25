@@ -10,6 +10,7 @@ import Library.Project.dto.Response.PageResponse;
 import Library.Project.dto.Response.ResponseData;
 import Library.Project.dto.Response.ResponseError;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -47,6 +48,7 @@ public class CategoryController {
     }
 
     @Operation(summary = "Get all category", description = "Show all category of library")
+    @SecurityRequirements
     @GetMapping("/all")
     public ResponseData<PageResponse> getAllCategories(@RequestParam @Min(1) int pageNo, @RequestParam @Min(1) int pageSize) {
         PageResponse categoryFound = categoryService.getAllCategories(pageNo, pageSize);
