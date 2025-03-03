@@ -1,6 +1,5 @@
 package Library.Project.configuration;
 
-import Library.Project.enums.Role;
 import Library.Project.entity.User;
 import Library.Project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

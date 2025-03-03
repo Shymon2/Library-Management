@@ -1,7 +1,6 @@
 package Library.Project.dto.Response;
 
 import Library.Project.entity.Book;
-import Library.Project.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -1,7 +1,6 @@
 package Library.Project.service.interfaces;
 
 import Library.Project.dto.Request.BookSearchRequest;
-import Library.Project.dto.Response.BookDetailResponse;
 import Library.Project.entity.Book;
 import Library.Project.dto.Request.BookRequestDTO;
 import Library.Project.dto.Response.PageResponse;
