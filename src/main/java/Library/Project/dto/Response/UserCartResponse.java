@@ -1,6 +1,5 @@
 package Library.Project.dto.Response;
 
-import Library.Project.Model.Cart;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,5 +22,4 @@ public class UserCartResponse implements Serializable {
     private String identityNum;
     private LocalDate dateOfBirth;
     private String address;
-    private Cart cart;
 }

@@ -14,5 +14,5 @@ public class BookDetailResponse implements Serializable {
     private String title;
     private String author;
     private int quantity;
-    private Set<CategoryDTO> categories;
+    private Set<String> categories;
 }
