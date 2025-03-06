@@ -96,7 +96,10 @@ public class AuthenticationService implements IAuthenticationService {
         Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
 
         InvalidatedToken invalidatedToken =
-                InvalidatedToken.builder().id(jit).expiryTime(expiryTime).build();
+                InvalidatedToken.builder()
+                        .id(jit)
+                        .expiryTime(expiryTime)
+                        .build();
 
         invalidatedTokenRepository.save(invalidatedToken);
     }

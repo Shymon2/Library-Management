@@ -15,7 +15,8 @@ public enum ErrorCode {
     BOOK_QUANTITY_EXCEED(1006, Translator.toLocale("error.code.book.quantity"), HttpStatus.BAD_REQUEST),
     UNAUTHENTICATED(1007, Translator.toLocale("error.code.unauthenticated"), HttpStatus.UNAUTHORIZED),
     USERNAME_PASSWORD_INCORRECT(1008, Translator.toLocale("error.username.password.incorrect"), HttpStatus.BAD_REQUEST),
-    ALREADY_EXISTED(1009, Translator.toLocale("error.already.existed"), HttpStatus.BAD_REQUEST);
+    ALREADY_EXISTED(1009, Translator.toLocale("error.already.existed"), HttpStatus.BAD_REQUEST),
+    TOKEN_INVALID(1010, Translator.toLocale("error.token.invalid"), HttpStatus.BAD_REQUEST);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
