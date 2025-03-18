@@ -1,13 +1,17 @@
 package Library.Project.service.interfaces;
 
+import Library.Project.dto.Response.CartItemResponse;
+import Library.Project.dto.Response.UserCartResponse;
 import Library.Project.entity.CartItem;
 
 public interface ICartItemService {
-    CartItem addItemToCart(Long cartId, Long bookId, int quantity);
+    CartItemResponse addItemToCart(Long cartId, Long bookId, int quantity);
 
-    void removeItemFromCart(Long cartId, Long cartItemId);
+    CartItemResponse removeItemFromCart(Long cartId, Long cartItemId);
 
-    CartItem updateItemQuantity(Long cartId, Long bookId, int quantity);
+    CartItemResponse updateItemQuantity(Long cartId, Long bookId, int quantity);
+
+    UserCartResponse cartResponse(Long userId);
 
     CartItem getCartItem(Long cartId, Long bookId);
 }

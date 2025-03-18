@@ -10,6 +10,7 @@ import Library.Project.dto.Response.ResponseData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -27,18 +28,18 @@ import org.springframework.web.bind.annotation.*;
 public class CategoryController {
     private final CategoryService categoryService;
 
-    @PreAuthorize(value = "hasAuthority(@roleMapping.getRoleForApi('library.category.createNewCategory'))")
+    @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Add new category", description = "New category")
     @PostMapping("/add")
-    public ResponseData<Category> addNewCategory(@Valid @RequestBody CategoryDTO request) {
+    public ResponseData<Category> addNewCategory(HttpServletRequest httpServletRequest, @Valid @RequestBody CategoryDTO request) {
         Category newCategory = categoryService.addNewCategory(request);
         return new ResponseData<>(1000, Translator.toLocale("category.add.success"), newCategory);
     }
 
-    @PreAuthorize(value = "hasAuthority(@roleMapping.getRoleForApi('library.category.getCateById'))")
+    @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Get category by Id", description = "Id must be positive")
     @GetMapping("/find-by-id")
-    public ResponseData<CategoryDetailResponse> getCategoryById(@RequestParam @Min(0) Long id) {
+    public ResponseData<CategoryDetailResponse> getCategoryById(HttpServletRequest httpServletRequest, @RequestParam @Min(0) Long id) {
         CategoryDetailResponse categoryFound = categoryService.getCategoryById(id);
         log.info("Category with id {} found successfully", id);
         return new ResponseData<>(1000, Translator.toLocale("category.found.success"), categoryFound);
@@ -54,19 +55,19 @@ public class CategoryController {
 
     }
 
-    @PreAuthorize(value = "hasAuthority(@roleMapping.getRoleForApi('library.category.updateCategory'))")
+    @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Update category by Id", description = "Id must be positive")
     @PutMapping("/update")
-    public ResponseData<Category> updateCategoryById(@RequestParam @Min(0) Long id, @Valid @RequestBody CategoryDTO request) {
+    public ResponseData<Category> updateCategoryById(HttpServletRequest httpServletRequest, @RequestParam @Min(0) Long id, @Valid @RequestBody CategoryDTO request) {
         Category category = categoryService.updateCategory(request, id);
         log.info("Category with id {} updated successfully", id);
         return new ResponseData<>(1000, Translator.toLocale("category.update.success"), category);
     }
 
-    @PreAuthorize(value = "hasAuthority(@roleMapping.getRoleForApi('library.category.deleteCategory'))")
+    @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Delete category by Id", description = "Id must be positive")
     @DeleteMapping("/delete")
-    public ResponseData<Category> deleteCategoryById(@RequestParam @Min(0) Long id) {
+    public ResponseData<Category> deleteCategoryById(HttpServletRequest httpServletRequest, @RequestParam @Min(0) Long id) {
         Category category = categoryService.deleteCategory(id);
         log.info("Category with id {} deleted successfully", id);
         return new ResponseData<>(1000, Translator.toLocale("category.delete.success"), category);

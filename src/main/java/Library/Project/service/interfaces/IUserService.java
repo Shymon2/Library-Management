@@ -20,8 +20,6 @@ public interface IUserService {
 
     void deleteUser(Long userId);
 
-    UserCartResponse convertToCartResponse(User user);
-
     UserInforResponse convertToInforResponse(User user);
 
     User findUserByUserName(String username);

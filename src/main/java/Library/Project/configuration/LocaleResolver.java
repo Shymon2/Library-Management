@@ -18,9 +18,8 @@ public class LocaleResolver extends AcceptHeaderLocaleResolver implements WebMvc
     @Override
     public Locale resolveLocale(HttpServletRequest request) {
         String languageHeader = request.getHeader("Accept-Language");
-        return !StringUtils.hasLength(languageHeader)
-                ? Locale.US
-                : Locale.lookup(Locale.LanguageRange.parse(languageHeader), LOCALES);
+        return !StringUtils.hasLength(languageHeader) ?
+                Locale.US : Locale.lookup(Locale.LanguageRange.parse(languageHeader), LOCALES);
     }
 
     @Bean

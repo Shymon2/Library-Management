@@ -1,6 +1,8 @@
 package Library.Project.service.implement;
 
+import Library.Project.dto.Response.CartItemResponse;
 import Library.Project.dto.Response.PageResponse;
+import Library.Project.entity.CartItem;
 import Library.Project.enums.ErrorCode;
 import Library.Project.enums.Role;
 import Library.Project.entity.User;
@@ -98,18 +100,6 @@ public class UserService implements IUserService {
     public void deleteUser(Long userId) {
         User user = getUserById(userId);
         user.setDelete(true);
-    }
-
-    @Override
-    public UserCartResponse convertToCartResponse(User user) {
-        return UserCartResponse.builder()
-                .username(user.getUsername())
-                .fullname(user.getFullname())
-                .identityNum(user.getIdentityNum())
-                .phoneNumber(user.getPhoneNumber())
-                .dateOfBirth(user.getDateOfBirth())
-                .address(user.getAddress())
-                .build();
     }
 
     @Override

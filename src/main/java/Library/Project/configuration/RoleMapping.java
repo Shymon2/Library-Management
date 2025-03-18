@@ -26,7 +26,7 @@ public class RoleMapping {
         }
     }
 
-    public String getRoleForApi(String api) {
+    public String getRoleForUri(String api) {
         return roleMappings.getOrDefault(api, "ROLE_DEFAULT");
     }
 }

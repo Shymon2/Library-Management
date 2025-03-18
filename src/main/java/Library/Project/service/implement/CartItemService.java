@@ -1,5 +1,7 @@
 package Library.Project.service.implement;
 
+import Library.Project.dto.Response.CartItemResponse;
+import Library.Project.dto.Response.UserCartResponse;
 import Library.Project.entity.User;
 import Library.Project.enums.ErrorCode;
 import Library.Project.exception.AppException;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,7 +26,7 @@ public class CartItemService implements ICartItemService {
     private final CartItemRepository cartItemRepository;
 
     @Override
-    public CartItem addItemToCart(Long userId, Long bookId, int quantity) {
+    public CartItemResponse addItemToCart(Long userId, Long bookId, int quantity) {
         //If book already in cart, then plus quantity
         if(cartItemRepository.existsByUserIdAndBookId(userId, bookId)){
             CartItem cartItem = getCartItem(userId, bookId);
@@ -34,7 +37,11 @@ public class CartItemService implements ICartItemService {
                 cartItem.setQuantity(newQuantity);
                 cartItemRepository.save(cartItem);
             }
-            return cartItem;
+            return CartItemResponse.builder()
+                    .book(cartItem.getBook())
+                    .quantity(cartItem.getQuantity())
+                    .username(cartItem.getUser().getUsername())
+                    .build();
         }
         //else create new cart item
         else {
@@ -50,17 +57,25 @@ public class CartItemService implements ICartItemService {
                 cartItem.setQuantity(quantity);
                 cartItemRepository.save(cartItem);
             }
-            return cartItem;
+            return CartItemResponse.builder()
+                    .book(cartItem.getBook())
+                    .quantity(cartItem.getQuantity())
+                    .username(cartItem.getUser().getUsername())
+                    .build();
         }
     }
 
     @Override
-    public void removeItemFromCart(Long userId, Long bookId) {
+    public CartItemResponse removeItemFromCart(Long userId, Long bookId) {
         CartItem cartItem = cartItemRepository.findByUserIdAndBookId(userId, bookId);
         if(cartItem == null)
             throw new AppException(ErrorCode.NOT_FOUND);
-
         cartItem.setDelete(true);
+        return CartItemResponse.builder()
+                .book(cartItem.getBook())
+                .quantity(cartItem.getQuantity())
+                .username(cartItem.getUser().getUsername())
+                .build();
     }
 
     @Override
@@ -72,7 +87,7 @@ public class CartItemService implements ICartItemService {
     }
 
     @Override
-    public CartItem updateItemQuantity(Long userId, Long bookId, int quantity) {
+    public CartItemResponse updateItemQuantity(Long userId, Long bookId, int quantity) {
         User user = userService.getUserById(userId);
         Book book = bookService.findBookById(bookId);
         if(quantity > book.getQuantity()){
@@ -81,8 +96,33 @@ public class CartItemService implements ICartItemService {
         else {
             CartItem cartItem = getCartItem(userId, bookId);
             cartItem.setQuantity(quantity);
-            return cartItemRepository.save(cartItem);
+            cartItemRepository.save(cartItem);
+            return CartItemResponse.builder()
+                    .book(cartItem.getBook())
+                    .quantity(cartItem.getQuantity())
+                    .username(cartItem.getUser().getUsername())
+                    .build();
         }
+    }
+
+    @Override
+    public UserCartResponse cartResponse(Long userId){
+            User user = userService.getUserById(userId);
+            List<CartItem> cartItems = getItemsByUser(user.getId());
+            List<CartItemResponse> list = new ArrayList<>();
+            cartItems.forEach(a -> list.add(CartItemResponse.builder()
+                    .book(a.getBook())
+                    .quantity(a.getQuantity())
+                    .build()));
+            return UserCartResponse.builder()
+                    .username(user.getUsername())
+                    .fullname(user.getFullname())
+                    .identityNum(user.getIdentityNum())
+                    .phoneNumber(user.getPhoneNumber())
+                    .dateOfBirth(user.getDateOfBirth())
+                    .address(user.getAddress())
+                    .listItems(list)
+                    .build();
     }
 
     public List<CartItem> getItemsByUser(Long userId){

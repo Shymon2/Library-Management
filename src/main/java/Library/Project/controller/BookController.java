@@ -11,6 +11,7 @@ import Library.Project.dto.Response.ResponseData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -37,11 +38,10 @@ public class BookController {
         return new ResponseData<>(1000, Translator.toLocale("book.get.success"), bookService.convertToResponse(bookFound));
     }
 
-    @PreAuthorize(value = "hasAuthority(@roleMapping.getRoleForApi('library.book.addNewBook'))")
+    @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Add new Book")
     @PostMapping("/add")
-    public ResponseData<BookDetailResponse> addNewBook(@Valid @RequestBody BookRequestDTO request) {
-        
+    public ResponseData<BookDetailResponse> addNewBook(HttpServletRequest httpServletRequest, @Valid @RequestBody BookRequestDTO request) {
         if (bookService.existsByTitleAndAuthor(request.getTitle(), request.getAuthor())) {
             Book updateBook = bookService.addNewBook(request);
             return new ResponseData<>(1000, Translator.toLocale("book.update.instead"), bookService.convertToResponse(updateBook));
@@ -71,20 +71,21 @@ public class BookController {
 
     }
 
-    @PreAuthorize(value = "hasAuthority(@roleMapping.getRoleForApi('library.book.deleteBookById'))")
+    @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Delete book by Id")
     @DeleteMapping("/delete")
-    public ResponseData<String> deleteBookById(@RequestParam Long id) {
+    public ResponseData<String> deleteBookById(HttpServletRequest httpServletRequest, @RequestParam Long id) {
         bookService.deleteBookById(id);
         return new ResponseData<>(1000, Translator.toLocale("book.delete.success"));
 
     }
 
-    @PreAuthorize(value = "hasAuthority(@roleMapping.getRoleForApi('library.book.updateBookById'))")
+    @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Update book by Id")
     @PutMapping("/update")
-    public ResponseData<BookDetailResponse> updateBookById(@RequestParam Long id, @Valid @RequestBody BookRequestDTO request) {
+    public ResponseData<BookDetailResponse> updateBookById(HttpServletRequest httpServletRequest, @RequestParam Long id, @Valid @RequestBody BookRequestDTO request) {
         Book book = bookService.updateBook(request, id);
         return new ResponseData<>(1000, Translator.toLocale("book.update.success"), bookService.convertToResponse(book));
     }
+
 }

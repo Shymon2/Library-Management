@@ -36,6 +36,7 @@ public class JwtInvalidatedTokenFilter extends OncePerRequestFilter {
                 if (!invalidatedTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID())) {
                     filterChain.doFilter(request, response);
                 } else {
+
                     ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
                     response.setStatus(errorCode.getStatusCode().value());
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);

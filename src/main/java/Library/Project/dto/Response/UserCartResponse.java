@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,4 +23,6 @@ public class UserCartResponse implements Serializable {
     private String identityNum;
     private LocalDate dateOfBirth;
     private String address;
+
+    private List<CartItemResponse> listItems;
 }

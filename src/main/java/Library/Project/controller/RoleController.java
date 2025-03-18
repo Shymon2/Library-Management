@@ -8,6 +8,7 @@ import Library.Project.dto.Response.RoleResponse;
 import Library.Project.service.implement.RoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,32 +24,32 @@ import org.springframework.web.bind.annotation.*;
 public class RoleController {
     private final RoleService roleService;
 
-    @PreAuthorize("hasAuthority(@roleMapping.getRoleForApi('role.add.new'))")
+    @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Create new role")
     @PostMapping("/add")
-    public ResponseData<RoleResponse> addNew(@RequestBody RoleRequest request){
+    public ResponseData<RoleResponse> addNew(HttpServletRequest httpServletRequest, @RequestBody RoleRequest request){
         return new ResponseData<>(1000, Translator.toLocale("role.create.success"), roleService.createNewRole(request));
     }
 
-    @PreAuthorize("hasAuthority(@roleMapping.getRoleForApi('role.get'))")
+    @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Get all roles")
     @GetMapping("/get-all")
-    public ResponseData<PageResponse> getAll(@RequestParam int pageNo, @RequestParam int pageSize){
+    public ResponseData<PageResponse> getAll(HttpServletRequest httpServletRequest, @RequestParam int pageNo, @RequestParam int pageSize){
         return new ResponseData<>(1000, Translator.toLocale("role.get.all"), roleService.showAll(pageNo, pageSize));
     }
 
-    @PreAuthorize("hasAuthority(@roleMapping.getRoleForApi('role.update'))")
+    @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Update role")
     @PostMapping("/update")
-    public ResponseData<String> updateRole(@RequestParam Long id ,@RequestBody RoleRequest request){
+    public ResponseData<String> updateRole(HttpServletRequest httpServletRequest, @RequestParam Long id ,@RequestBody RoleRequest request){
         roleService.updateRole(id, request);
         return new ResponseData<>(1000, Translator.toLocale("role.update.done"));
     }
 
-    @PreAuthorize("hasAuthority(@roleMapping.getRoleForApi('role.delete'))")
+    @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Delete role")
-    @PostMapping("/delete")
-    public ResponseData<String> deleteRole(@RequestParam Long id){
+    @DeleteMapping("/delete")
+    public ResponseData<String> deleteRole(HttpServletRequest httpServletRequest, @RequestParam Long id){
         roleService.deleteRole(id);
         return new ResponseData<>(1000, Translator.toLocale("role.delete.done"));
     }

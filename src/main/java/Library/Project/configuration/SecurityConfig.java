@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -21,17 +19,26 @@ import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
 public class SecurityConfig {
+
+
     private final String[] PUBLIC_ENDPOINTS = {
-            "/user/newUser", "/auth/**", "/static/**", "/category/all", "/book/**"
+            "/user/newUser",
+            "/auth/**",
+            "/static/**",
+            "/category/all",
+            "/book/find-by-id",
+            "/book/find-by-criteria",
+            "/excel/export-book"
     };
 
-    private static final String[] AUTH_WHITELIST = {
+    private final String[] AUTH_WHITELIST = {
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/swagger-ui.html"
     };
+
+
 
     @Value("${jwt.signerKey}")
     private String signerKey;
@@ -42,8 +49,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request ->
-                request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
+                request.requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated())
                 .addFilterBefore(invalidatedTokenFilter, UsernamePasswordAuthenticationFilter.class);
@@ -80,4 +86,6 @@ public class SecurityConfig {
                 .macAlgorithm(MacAlgorithm.HS512)
                 .build();
     }
+
+
 }
