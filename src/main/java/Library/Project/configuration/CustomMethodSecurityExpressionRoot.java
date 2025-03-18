@@ -1,7 +1,5 @@
 package Library.Project.configuration;
 
-import Library.Project.enums.ErrorCode;
-import Library.Project.exception.AppException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
