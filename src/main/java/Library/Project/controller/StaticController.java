@@ -2,9 +2,10 @@ package Library.Project.controller;
 
 import Library.Project.configuration.Translator;
 import Library.Project.service.implement.StaticService;
-import Library.Project.dto.Response.BookTrendResponse;
-import Library.Project.dto.Response.CategoryStaticResponse;
-import Library.Project.dto.Response.ResponseData;
+import Library.Project.dto.Response.LibraryResponse.BookTrendResponse;
+import Library.Project.dto.Response.LibraryResponse.CategoryStaticResponse;
+import Library.Project.dto.Response.ApiResponse.ResponseData;
+import Library.Project.service.interfaces.IStaticService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,7 +24,7 @@ import java.util.List;
 @Tag(name = "Static Controller")
 @RequestMapping("/static")
 public class StaticController {
-    private final StaticService staticService;
+    private final IStaticService staticService;
 
     @Operation(summary = "Get number of book by category")
     @GetMapping("/book-by-cate")

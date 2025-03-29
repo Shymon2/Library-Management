@@ -1,6 +1,6 @@
 package Library.Project.controller;
 
-import Library.Project.service.implement.ExcelService;
+import Library.Project.service.interfaces.IExcelService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import java.io.IOException;
 @RequestMapping("/excel")
 @Tag(name = "Excel Controller")
 public class ExcelController {
-    private final ExcelService excelService;
+    private final IExcelService excelService;
 
     @GetMapping("/export-book")
     public void exportToExcel(HttpServletResponse response) throws IOException {

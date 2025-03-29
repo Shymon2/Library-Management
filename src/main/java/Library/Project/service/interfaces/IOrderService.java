@@ -1,5 +1,6 @@
 package Library.Project.service.interfaces;
 
+import Library.Project.dto.Response.OrderResponse.OrderInforResponse;
 import Library.Project.enums.OrderStatus;
 import Library.Project.entity.Orders;
 
@@ -23,4 +24,5 @@ public interface IOrderService {
 
     List<Orders> getAllOrderByStatus(OrderStatus status);
 
+    OrderInforResponse convertToInforResponse(Orders order);
 }

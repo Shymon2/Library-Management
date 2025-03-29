@@ -1,11 +1,12 @@
 package Library.Project.controller;
 
 import Library.Project.configuration.Translator;
-import Library.Project.dto.Request.RoleRequest;
-import Library.Project.dto.Response.PageResponse;
-import Library.Project.dto.Response.ResponseData;
-import Library.Project.dto.Response.RoleResponse;
+import Library.Project.dto.Request.User.RoleRequest;
+import Library.Project.dto.Response.ApiResponse.PageResponse;
+import Library.Project.dto.Response.ApiResponse.ResponseData;
+import Library.Project.dto.Response.UserResponse.RoleResponse;
 import Library.Project.service.implement.RoleService;
+import Library.Project.service.interfaces.IRoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @Tag(name = "Role Controller")
 public class RoleController {
-    private final RoleService roleService;
+    private final IRoleService roleService;
 
     @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Create new role")

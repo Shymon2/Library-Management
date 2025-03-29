@@ -1,9 +1,10 @@
 package Library.Project.service.interfaces;
 
-import Library.Project.dto.Request.BookSearchRequest;
+import Library.Project.dto.Request.Library.BookSearchRequest;
+import Library.Project.dto.Response.LibraryResponse.BookDetailResponse;
 import Library.Project.entity.Book;
-import Library.Project.dto.Request.BookRequestDTO;
-import Library.Project.dto.Response.PageResponse;
+import Library.Project.dto.Request.Library.BookRequestDTO;
+import Library.Project.dto.Response.ApiResponse.PageResponse;
 
 public interface IBookService {
     Book findBookById(Long id);
@@ -21,4 +22,6 @@ public interface IBookService {
     void updateBookQuantity(Long bookId, int quantity);
 
     Boolean existsByTitleAndAuthor(String title, String author);
+
+    BookDetailResponse convertToResponse(Book book);
 }

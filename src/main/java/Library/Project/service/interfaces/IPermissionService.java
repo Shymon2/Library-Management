@@ -1,8 +1,8 @@
 package Library.Project.service.interfaces;
 
-import Library.Project.dto.Request.PermissionRequest;
-import Library.Project.dto.Response.PageResponse;
-import Library.Project.dto.Response.PermissionResponse;
+import Library.Project.dto.Request.User.PermissionRequest;
+import Library.Project.dto.Response.ApiResponse.PageResponse;
+import Library.Project.dto.Response.UserResponse.PermissionResponse;
 
 public interface IPermissionService {
     PermissionResponse create(PermissionRequest request);

@@ -1,13 +1,14 @@
 package Library.Project.controller;
 
 import Library.Project.configuration.Translator;
-import Library.Project.dto.Response.CartItemResponse;
-import Library.Project.entity.CartItem;
+import Library.Project.dto.Response.CartResponse.CartItemResponse;
 import Library.Project.entity.User;
 import Library.Project.service.implement.CartItemService;
 import Library.Project.service.implement.UserService;
-import Library.Project.dto.Response.ResponseData;
-import Library.Project.dto.Response.UserCartResponse;
+import Library.Project.dto.Response.ApiResponse.ResponseData;
+import Library.Project.dto.Response.CartResponse.UserCartResponse;
+import Library.Project.service.interfaces.ICartItemService;
+import Library.Project.service.interfaces.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,8 +27,8 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Cart Controller")
 @RequestMapping("/cartItem")
 public class CartController {
-    private final CartItemService cartItemService;
-    private final UserService userService;
+    private final ICartItemService cartItemService;
+    private final IUserService userService;
 
     @PostAuthorize(value = "returnObject.data.username == authentication.name")
     @Operation(summary = "Add item to cart")

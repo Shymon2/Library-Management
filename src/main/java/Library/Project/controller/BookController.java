@@ -1,13 +1,14 @@
 package Library.Project.controller;
 
 import Library.Project.configuration.Translator;
-import Library.Project.dto.Request.BookSearchRequest;
+import Library.Project.dto.Request.Library.BookSearchRequest;
 import Library.Project.entity.Book;
 import Library.Project.service.implement.BookService;
-import Library.Project.dto.Request.BookRequestDTO;
-import Library.Project.dto.Response.BookDetailResponse;
-import Library.Project.dto.Response.PageResponse;
-import Library.Project.dto.Response.ResponseData;
+import Library.Project.dto.Request.Library.BookRequestDTO;
+import Library.Project.dto.Response.LibraryResponse.BookDetailResponse;
+import Library.Project.dto.Response.ApiResponse.PageResponse;
+import Library.Project.dto.Response.ApiResponse.ResponseData;
+import Library.Project.service.interfaces.IBookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Book Controller")
 public class BookController {
 
-    private final BookService bookService;
+    private final IBookService bookService;
 
     @Operation(summary = "Find book by ID", description = "ID must be positive")
     @SecurityRequirements

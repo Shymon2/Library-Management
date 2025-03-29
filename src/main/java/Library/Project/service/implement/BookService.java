@@ -1,17 +1,17 @@
 package Library.Project.service.implement;
 
-import Library.Project.dto.Request.BookSearchRequest;
+import Library.Project.dto.Request.Library.BookSearchRequest;
 import Library.Project.entity.Book;
 import Library.Project.entity.Category;
 import Library.Project.enums.ErrorCode;
 import Library.Project.exception.AppException;
 import Library.Project.repository.BookRepository;
 import Library.Project.service.interfaces.IBookService;
-import Library.Project.dto.Request.BookRequestDTO;
-import Library.Project.dto.Request.CategoryDTO;
-import Library.Project.dto.Response.BookDetailResponse;
-import Library.Project.dto.Response.PageResponse;
-import Library.Project.specification.BookSpecification;
+import Library.Project.dto.Request.Library.BookRequestDTO;
+import Library.Project.dto.Request.Library.CategoryDTO;
+import Library.Project.dto.Response.LibraryResponse.BookDetailResponse;
+import Library.Project.dto.Response.ApiResponse.PageResponse;
+//import Library.Project.specification.BookSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -92,8 +92,10 @@ public class BookService implements IBookService {
 
     @Override
     public PageResponse findBooksByCriteria(BookSearchRequest request, int pageNo, int pageSize) {
-        Specification<Book> spec = BookSpecification.filterBooks(request);
-        Page<Book> bookList = bookRepository.findAll(spec, PageRequest.of(pageNo - 1, pageSize));
+//        Specification<Book> spec = BookSpecification.filterBooks(request);
+//        Page<Book> bookList = bookRepository.findAll(spec, PageRequest.of(pageNo - 1, pageSize));
+        Page<Book> bookList = bookRepository.search(request.getTitle(), request.getAuthor(),
+                request.getCategory(), PageRequest.of(pageNo - 1, pageSize));
 
         List<BookDetailResponse> responseList = new ArrayList<>();
         bookList.forEach(a -> {

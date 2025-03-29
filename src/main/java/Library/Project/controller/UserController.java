@@ -1,13 +1,14 @@
 package Library.Project.controller;
 
 import Library.Project.configuration.Translator;
-import Library.Project.dto.Response.PageResponse;
+import Library.Project.dto.Response.ApiResponse.PageResponse;
 import Library.Project.entity.User;
 import Library.Project.service.implement.UserService;
-import Library.Project.dto.Request.UpdateUserDTO;
-import Library.Project.dto.Request.UserDTO;
-import Library.Project.dto.Response.ResponseData;
-import Library.Project.dto.Response.UserInforResponse;
+import Library.Project.dto.Request.User.UpdateUserDTO;
+import Library.Project.dto.Request.User.UserDTO;
+import Library.Project.dto.Response.ApiResponse.ResponseData;
+import Library.Project.dto.Response.UserResponse.UserInforResponse;
+import Library.Project.service.interfaces.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,15 +20,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @Slf4j
 @RequiredArgsConstructor
 @Tag(name = "User Controller")
 @RequestMapping("/user")
 public class UserController {
-    private final UserService userService;
+    private final IUserService userService;
 
     @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Get user by Id", description = "Id must be positive")

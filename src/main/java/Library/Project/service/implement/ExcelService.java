@@ -2,6 +2,7 @@ package Library.Project.service.implement;
 
 import Library.Project.entity.Book;
 import Library.Project.repository.BookRepository;
+import Library.Project.service.interfaces.IExcelService;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ExcelService {
+public class ExcelService implements IExcelService {
     private final BookRepository bookRepository;
 
     public void exportToExcel(OutputStream outputStream) throws IOException {

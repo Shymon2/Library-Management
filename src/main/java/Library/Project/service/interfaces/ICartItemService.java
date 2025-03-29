@@ -1,7 +1,7 @@
 package Library.Project.service.interfaces;
 
-import Library.Project.dto.Response.CartItemResponse;
-import Library.Project.dto.Response.UserCartResponse;
+import Library.Project.dto.Response.CartResponse.CartItemResponse;
+import Library.Project.dto.Response.CartResponse.UserCartResponse;
 import Library.Project.entity.CartItem;
 
 public interface ICartItemService {

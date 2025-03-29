@@ -1,11 +1,12 @@
 package Library.Project.controller;
 
 import Library.Project.configuration.Translator;
-import Library.Project.dto.Request.PermissionRequest;
-import Library.Project.dto.Response.PageResponse;
-import Library.Project.dto.Response.PermissionResponse;
-import Library.Project.dto.Response.ResponseData;
+import Library.Project.dto.Request.User.PermissionRequest;
+import Library.Project.dto.Response.ApiResponse.PageResponse;
+import Library.Project.dto.Response.UserResponse.PermissionResponse;
+import Library.Project.dto.Response.ApiResponse.ResponseData;
 import Library.Project.service.implement.PermissionService;
+import Library.Project.service.interfaces.IPermissionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @Tag(name = "Permission Controller")
 public class PermissionController {
-    private final PermissionService permissionService;
+    private final IPermissionService permissionService;
 
     @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Add new permission")

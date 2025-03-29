@@ -1,10 +1,10 @@
 package Library.Project.service.interfaces;
 
-import Library.Project.dto.Request.AuthenticationRequest;
-import Library.Project.dto.Request.IntrospectRequest;
-import Library.Project.dto.Request.LogoutRequest;
-import Library.Project.dto.Response.AuthenticationResponse;
-import Library.Project.dto.Response.IntrospectResponse;
+import Library.Project.dto.Request.Authentication.AuthenticationRequest;
+import Library.Project.dto.Request.Authentication.IntrospectRequest;
+import Library.Project.dto.Request.Authentication.LogoutRequest;
+import Library.Project.dto.Response.AuthenticationResponse.AuthenticationResponse;
+import Library.Project.dto.Response.AuthenticationResponse.IntrospectResponse;
 import com.nimbusds.jose.JOSEException;
 
 import java.text.ParseException;

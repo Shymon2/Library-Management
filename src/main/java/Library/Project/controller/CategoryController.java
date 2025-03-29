@@ -3,10 +3,11 @@ package Library.Project.controller;
 import Library.Project.configuration.Translator;
 import Library.Project.entity.Category;
 import Library.Project.service.implement.CategoryService;
-import Library.Project.dto.Request.CategoryDTO;
-import Library.Project.dto.Response.CategoryDetailResponse;
-import Library.Project.dto.Response.PageResponse;
-import Library.Project.dto.Response.ResponseData;
+import Library.Project.dto.Request.Library.CategoryDTO;
+import Library.Project.dto.Response.LibraryResponse.CategoryDetailResponse;
+import Library.Project.dto.Response.ApiResponse.PageResponse;
+import Library.Project.dto.Response.ApiResponse.ResponseData;
+import Library.Project.service.interfaces.ICategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @Tag(name = "Category Controller")
 public class CategoryController {
-    private final CategoryService categoryService;
+    private final ICategoryService categoryService;
 
     @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Add new category", description = "New category")

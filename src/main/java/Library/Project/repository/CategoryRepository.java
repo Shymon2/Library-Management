@@ -1,7 +1,7 @@
 package Library.Project.repository;
 
 import Library.Project.entity.Category;
-import Library.Project.dto.Request.BooksByCateDTO;
+import Library.Project.dto.Request.Library.BooksByCateProjection;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,5 +20,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             "JOIN book_category bc ON c.id = bc.category_id " +
             "GROUP BY c.category_name",
             nativeQuery = true)
-    List<BooksByCateDTO> findNumBookByCategoryName();
+    List<BooksByCateProjection> findNumBookByCategoryName();
 }

@@ -6,8 +6,10 @@ import Library.Project.entity.Orders;
 import Library.Project.entity.User;
 import Library.Project.service.implement.OrderService;
 import Library.Project.service.implement.UserService;
-import Library.Project.dto.Response.OrderInforResponse;
-import Library.Project.dto.Response.ResponseData;
+import Library.Project.dto.Response.OrderResponse.OrderInforResponse;
+import Library.Project.dto.Response.ApiResponse.ResponseData;
+import Library.Project.service.interfaces.IOrderService;
+import Library.Project.service.interfaces.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,8 +33,8 @@ import java.util.List;
 @Slf4j
 @Tag(name = "Order Controller")
 public class OrderController {
-    private final OrderService orderService;
-    private final UserService userService;
+    private final IOrderService orderService;
+    private final IUserService userService;
 
     @PostAuthorize(value = "returnObject.data.user.username == authentication.name")
     @Operation(summary = "Place order")

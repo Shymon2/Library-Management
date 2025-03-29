@@ -4,10 +4,10 @@ import Library.Project.enums.ErrorCode;
 import Library.Project.exception.AppException;
 import Library.Project.repository.BookRepository;
 import Library.Project.repository.CategoryRepository;
-import Library.Project.dto.Request.BookTrendDTO;
-import Library.Project.dto.Request.BooksByCateDTO;
-import Library.Project.dto.Response.BookTrendResponse;
-import Library.Project.dto.Response.CategoryStaticResponse;
+import Library.Project.dto.Request.Library.BookTrendProjection;
+import Library.Project.dto.Request.Library.BooksByCateProjection;
+import Library.Project.dto.Response.LibraryResponse.BookTrendResponse;
+import Library.Project.dto.Response.LibraryResponse.CategoryStaticResponse;
 import Library.Project.service.interfaces.IStaticService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class StaticService implements IStaticService {
 
     @Override
     public List<CategoryStaticResponse> numBookByCate() {
-        List<BooksByCateDTO> list = categoryRepository.findNumBookByCategoryName();
+        List<BooksByCateProjection> list = categoryRepository.findNumBookByCategoryName();
         if(list.isEmpty())
             throw new AppException(ErrorCode.NOT_FOUND);
         return list.stream().map(a ->
@@ -36,7 +36,7 @@ public class StaticService implements IStaticService {
 
     @Override
     public List<BookTrendResponse> top5BookOrder() {
-        List<BookTrendDTO> list = bookRepository.findTop5BookOrder();
+        List<BookTrendProjection> list = bookRepository.findTop5BookOrder();
         if(list.isEmpty())
             throw new AppException(ErrorCode.NOT_FOUND);
         return list.stream().map(a ->

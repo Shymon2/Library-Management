@@ -2,12 +2,13 @@ package Library.Project.controller;
 
 import Library.Project.configuration.Translator;
 import Library.Project.service.implement.AuthenticationService;
-import Library.Project.dto.Request.AuthenticationRequest;
-import Library.Project.dto.Request.IntrospectRequest;
-import Library.Project.dto.Request.LogoutRequest;
-import Library.Project.dto.Response.AuthenticationResponse;
-import Library.Project.dto.Response.IntrospectResponse;
-import Library.Project.dto.Response.ResponseData;
+import Library.Project.dto.Request.Authentication.AuthenticationRequest;
+import Library.Project.dto.Request.Authentication.IntrospectRequest;
+import Library.Project.dto.Request.Authentication.LogoutRequest;
+import Library.Project.dto.Response.AuthenticationResponse.AuthenticationResponse;
+import Library.Project.dto.Response.AuthenticationResponse.IntrospectResponse;
+import Library.Project.dto.Response.ApiResponse.ResponseData;
+import Library.Project.service.interfaces.IAuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
@@ -24,7 +25,7 @@ import java.text.ParseException;
 @RequestMapping("/auth")
 @Tag(name = "Authentication Controller")
 public class AuthenticationController {
-    private final AuthenticationService authenticationService;
+    private final IAuthenticationService authenticationService;
 
     @Operation(summary = "Log in by username and password", description = "Return a token that need to save")
     @PostMapping("/login")

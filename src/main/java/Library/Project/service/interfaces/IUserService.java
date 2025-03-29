@@ -1,13 +1,10 @@
 package Library.Project.service.interfaces;
 
-import Library.Project.dto.Response.PageResponse;
+import Library.Project.dto.Response.ApiResponse.PageResponse;
 import Library.Project.entity.User;
-import Library.Project.dto.Request.UpdateUserDTO;
-import Library.Project.dto.Request.UserDTO;
-import Library.Project.dto.Response.UserCartResponse;
-import Library.Project.dto.Response.UserInforResponse;
-
-import java.util.List;
+import Library.Project.dto.Request.User.UpdateUserDTO;
+import Library.Project.dto.Request.User.UserDTO;
+import Library.Project.dto.Response.UserResponse.UserInforResponse;
 
 public interface IUserService {
     User getUserById(Long userId);

@@ -1,9 +1,9 @@
 package Library.Project.service.interfaces;
 
 import Library.Project.entity.Category;
-import Library.Project.dto.Request.CategoryDTO;
-import Library.Project.dto.Response.CategoryDetailResponse;
-import Library.Project.dto.Response.PageResponse;
+import Library.Project.dto.Request.Library.CategoryDTO;
+import Library.Project.dto.Response.LibraryResponse.CategoryDetailResponse;
+import Library.Project.dto.Response.ApiResponse.PageResponse;
 
 public interface ICategoryService {
 

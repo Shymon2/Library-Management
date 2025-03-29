@@ -1,8 +1,8 @@
 package Library.Project.service.interfaces;
 
-import Library.Project.dto.Request.RoleRequest;
-import Library.Project.dto.Response.PageResponse;
-import Library.Project.dto.Response.RoleResponse;
+import Library.Project.dto.Request.User.RoleRequest;
+import Library.Project.dto.Response.ApiResponse.PageResponse;
+import Library.Project.dto.Response.UserResponse.RoleResponse;
 
 public interface IRoleService {
     RoleResponse createNewRole(RoleRequest request);
