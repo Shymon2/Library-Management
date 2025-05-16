@@ -13,13 +13,11 @@ public class ResponseData<T> implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private T data;
 
-
     public ResponseData(int code, String message, T data) {
         this.code = code;
         this.message = message;
         this.data = data;
     }
-
 
     public ResponseData(int code, String message) {
         this.code = code;

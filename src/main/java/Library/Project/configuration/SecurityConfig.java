@@ -29,7 +29,8 @@ public class SecurityConfig {
             "/category/all",
             "/book/find-by-id",
             "/book/find-by-criteria",
-            "/excel/export-book"
+            "/excel/export-book",
+            "/get-book-from-api/all"
     };
 
     private final String[] AUTH_WHITELIST = {
@@ -56,9 +57,9 @@ public class SecurityConfig {
 
         httpSecurity.oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwtConfigurer ->
-                        jwtConfigurer.decoder(jwtDecoder()).
-                                jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+                        jwtConfigurer.decoder(jwtDecoder())
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
         );
 
 
