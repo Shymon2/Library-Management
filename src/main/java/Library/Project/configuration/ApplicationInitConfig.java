@@ -35,16 +35,10 @@ public class ApplicationInitConfig {
             factory.setConnectTimeout(5000); // Timeout kết nối: 5 giây
             factory.setReadTimeout(10000);   // Timeout đọc: 10 giây
             restTemplateCustomizer.setRequestFactory(factory);
-
-            // Thêm header mặc định (ví dụ)
-            restTemplateCustomizer.getInterceptors().add((request, body, execution) -> {
-                request.getHeaders().add("Authorization", "Bearer token123");
-                return execution.execute(request, body);
-            });
         };
     }
 
-    @Bean
+    @Bean(name = "restConfig")
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder
                 .additionalCustomizers(restTemplateCustomizer())
