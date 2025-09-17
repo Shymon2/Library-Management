@@ -1,4 +1,4 @@
-package Library.Project.enums;
+package Library.Project.constant.enums;
 
 import Library.Project.configuration.Translator;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
 @Getter
-public enum ErrorCode {
+public enum ErrorCodeFail implements ErrorCode{
     UNCATEGORIZED_EXCEPTION(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
     USER_EXISTED(1002, Translator.toLocale("error.user.existed"), HttpStatus.BAD_REQUEST),
     NOT_FOUND(1003, Translator.toLocale("error.not.found"), HttpStatus.BAD_REQUEST),
@@ -18,7 +18,7 @@ public enum ErrorCode {
     ALREADY_EXISTED(1009, Translator.toLocale("error.already.existed"), HttpStatus.BAD_REQUEST),
     TOKEN_INVALID(1010, Translator.toLocale("error.token.invalid"), HttpStatus.BAD_REQUEST);
 
-    ErrorCode(int code, String message, HttpStatusCode statusCode) {
+    ErrorCodeFail(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
         this.message = message;
         this.statusCode = statusCode;
@@ -27,4 +27,9 @@ public enum ErrorCode {
     private final int code;
     private final String message;
     private final HttpStatusCode statusCode;
+
+    @Override
+    public String errorCode() {
+        return String.valueOf(this.code);
+    }
 }

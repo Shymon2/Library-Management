@@ -1,19 +1,20 @@
 package Library.Project.controller;
 
 import Library.Project.configuration.Translator;
-import Library.Project.service.implement.AuthenticationService;
+import Library.Project.dto.GeneralPayload;
+import Library.Project.service.RestfulResponseFactory;
 import Library.Project.dto.Request.Authentication.AuthenticationRequest;
 import Library.Project.dto.Request.Authentication.IntrospectRequest;
 import Library.Project.dto.Request.Authentication.LogoutRequest;
 import Library.Project.dto.Response.AuthenticationResponse.AuthenticationResponse;
 import Library.Project.dto.Response.AuthenticationResponse.IntrospectResponse;
-import Library.Project.dto.Response.ApiResponse.ResponseData;
 import Library.Project.service.interfaces.IAuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,36 +23,34 @@ import java.text.ParseException;
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirements
-@RequestMapping("/auth")
+@RequestMapping("/${base.app.context}/public/api/v1/auth")
 @Tag(name = "Authentication Controller")
 public class AuthenticationController {
     private final IAuthenticationService authenticationService;
 
     @Operation(summary = "Log in by username and password", description = "Return a token that need to save")
     @PostMapping("/login")
-    public ResponseData<AuthenticationResponse> logIn(@RequestBody AuthenticationRequest request){
-        return new ResponseData<>(1000, Translator.toLocale("authentication.done"), authenticationService.authenticate(request));
+    public ResponseEntity<GeneralPayload<AuthenticationResponse>> logIn(@RequestBody AuthenticationRequest request){
+        return RestfulResponseFactory.of(authenticationService.authenticate(request));
     }
 
     @Operation(summary = "Verify token")
     @PostMapping("/introspect")
-    public ResponseData<IntrospectResponse> introspectToken(@RequestBody IntrospectRequest request)
+    public ResponseEntity<GeneralPayload<IntrospectResponse>> introspectToken(@RequestBody IntrospectRequest request)
             throws ParseException, JOSEException {
-        return new ResponseData<>(1000, Translator.toLocale("introspect.done"), authenticationService.introspectToken(request));
+        return RestfulResponseFactory.of(authenticationService.introspectToken(request));
     }
 
     @Operation(summary = "Log out")
     @PostMapping("/logout")
-    public ResponseData<String> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
-        authenticationService.logout(request);
-        return new ResponseData<>(1000, Translator.toLocale("authentication.logout.success"));
+    public ResponseEntity<GeneralPayload<Object>> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
+        return RestfulResponseFactory.of(authenticationService.logout(request));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Clean data of token db")
     @DeleteMapping("/remove-invalid-token")
-    public ResponseData<String> refreshDb(){
-        authenticationService.removeOverDateToken();
-        return new ResponseData<>(1000, Translator.toLocale("authentication.remove.token"));
+    public ResponseEntity<GeneralPayload<Object>> refreshDb(){
+        return RestfulResponseFactory.of(authenticationService.removeOverDateToken());
     }
 }

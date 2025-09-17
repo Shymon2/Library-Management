@@ -1,13 +1,13 @@
 package Library.Project.controller;
 
 import Library.Project.configuration.Translator;
+import Library.Project.dto.GeneralPayload;
 import Library.Project.dto.Request.Library.BookSearchRequest;
 import Library.Project.entity.Book;
-import Library.Project.service.implement.BookService;
 import Library.Project.dto.Request.Library.BookRequestDTO;
 import Library.Project.dto.Response.LibraryResponse.BookDetailResponse;
 import Library.Project.dto.Response.ApiResponse.PageResponse;
-import Library.Project.dto.Response.ApiResponse.ResponseData;
+import Library.Project.service.RestfulResponseFactory;
 import Library.Project.service.interfaces.IBookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
@@ -17,26 +17,27 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/${base.app.context}/api/v1/book")
 @Validated
 @RequiredArgsConstructor
 @Tag(name = "Book Controller")
 public class BookController {
-
     private final IBookService bookService;
 
     @Operation(summary = "Find book by ID", description = "ID must be positive")
     @SecurityRequirements
-    @GetMapping("/find-by-id")
-    public ResponseData<BookDetailResponse> getBookById(@RequestParam @Min(0) Long id) {
-        Book bookFound = bookService.findBookById(id);
-        return new ResponseData<>(1000, Translator.toLocale("book.get.success"), bookService.convertToResponse(bookFound));
+    @GetMapping("/find-by-name")
+    public ResponseEntity<GeneralPayload<BookDetailResponse>> getBookByName(@RequestParam String name) {
+        return RestfulResponseFactory.of(bookService.findBookByName(name));
     }
 
     @PreAuthorize("fileRole(#httpServletRequest)")
@@ -56,9 +57,9 @@ public class BookController {
     @Operation(summary = "Find book by criteria")
     @SecurityRequirements
     @PostMapping("/find-by-criteria")
-    public ResponseData<PageResponse> findByCriteria(@RequestBody BookSearchRequest request,
-                                                     @RequestParam int pageNo,
-                                                     @RequestParam int pageSize){
+    public ResponseData<PageResponse<List<BookDetailResponse>>> findByCriteria(@RequestBody BookSearchRequest request,
+                                                                               @RequestParam int pageNo,
+                                                                               @RequestParam int pageSize){
         return new ResponseData<>(1000, Translator.toLocale("book.found.success"), bookService.findBooksByCriteria(request, pageNo, pageSize));
     }
 

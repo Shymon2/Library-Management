@@ -4,7 +4,7 @@ import Library.Project.dto.Request.User.PermissionRequest;
 import Library.Project.dto.Response.ApiResponse.PageResponse;
 import Library.Project.dto.Response.UserResponse.PermissionResponse;
 import Library.Project.entity.Permission;
-import Library.Project.enums.ErrorCode;
+import Library.Project.constant.enums.ErrorCodeFail;
 import Library.Project.exception.AppException;
 import Library.Project.repository.PermissionRepository;
 import Library.Project.service.interfaces.IPermissionService;
@@ -42,7 +42,7 @@ public class PermissionService implements IPermissionService {
     public PageResponse getAll(int pageNo, int pageSize) {
         Page<Permission> permissions = permissionRepository.findPermissionByIsDelete(PageRequest.of(pageNo - 1, pageSize), false);
         if (permissions.isEmpty())
-            throw new AppException(ErrorCode.NOT_FOUND);
+            throw new AppException(ErrorCodeFail.NOT_FOUND);
 
         return PageResponse.builder()
                 .pageNo(pageNo)
@@ -55,7 +55,7 @@ public class PermissionService implements IPermissionService {
     @Override
     public void update(Long permissionId, PermissionRequest request) {
         Permission itemFound = permissionRepository.findById(permissionId).orElseThrow(() ->
-                new AppException(ErrorCode.NOT_FOUND));
+                new AppException(ErrorCodeFail.NOT_FOUND));
         itemFound.setName(request.getName());
         itemFound.setDescription(request.getDescription());
         permissionRepository.save(itemFound);
@@ -64,7 +64,7 @@ public class PermissionService implements IPermissionService {
     @Override
     public void delete(Long permissionId) {
         Permission itemFound = permissionRepository.findById(permissionId).orElseThrow(() ->
-                new AppException(ErrorCode.NOT_FOUND));
+                new AppException(ErrorCodeFail.NOT_FOUND));
         itemFound.setDelete(true);
         permissionRepository.save(itemFound);
     }

@@ -3,7 +3,7 @@ package Library.Project.service.implement;
 import Library.Project.dto.Request.Library.BookSearchRequest;
 import Library.Project.entity.Book;
 import Library.Project.entity.Category;
-import Library.Project.enums.ErrorCode;
+import Library.Project.constant.enums.ErrorCodeFail;
 import Library.Project.exception.AppException;
 import Library.Project.repository.BookRepository;
 import Library.Project.service.interfaces.IBookService;
@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,9 +34,9 @@ public class BookService implements IBookService {
 
 
     @Override
-    public Book findBookById(Long id) {
-        return bookRepository.findById(id).orElseThrow(() ->
-                new AppException(ErrorCode.NOT_FOUND));
+    public BookDetailResponse findBookByName(String name) {
+        Book book =  bookRepository.findById(id).orElseThrow(() ->
+                new AppException(ErrorCodeFail.NOT_FOUND));
     }
 
     private Set<CategoryDTO> convertToCategoryDTO(Set<Category> categories) {
@@ -91,9 +90,7 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public PageResponse findBooksByCriteria(BookSearchRequest request, int pageNo, int pageSize) {
-//        Specification<Book> spec = BookSpecification.filterBooks(request);
-//        Page<Book> bookList = bookRepository.findAll(spec, PageRequest.of(pageNo - 1, pageSize));
+    public PageResponse<List<BookDetailResponse>> findBooksByCriteria(BookSearchRequest request, int pageNo, int pageSize) {
         Page<Book> bookList = bookRepository.search(request.getTitle(), request.getAuthor(),
                 request.getCategory(), PageRequest.of(pageNo - 1, pageSize));
 
@@ -109,7 +106,7 @@ public class BookService implements IBookService {
                     .categories(categories)
                     .build());
         });
-        return PageResponse.builder()
+        return PageResponse.<List<BookDetailResponse>>builder()
                 .pageNo(pageNo)
                 .pageSize(pageSize)
                 .totalPage(bookList.getTotalPages())
@@ -122,7 +119,7 @@ public class BookService implements IBookService {
     public PageResponse findALlBook(int pageNo, int pageSize) {
         Page<Book> bookFound = bookRepository.findBookByIsDelete(PageRequest.of(pageNo - 1, pageSize), false);
         if(bookFound.isEmpty()){
-            throw new AppException(ErrorCode.NOT_FOUND);
+            throw new AppException(ErrorCodeFail.NOT_FOUND);
         }
         List<BookDetailResponse> bookList = new ArrayList<>();
         bookFound.getContent().forEach(a -> {
@@ -146,7 +143,7 @@ public class BookService implements IBookService {
     @Override
     public void deleteBookById(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(() ->
-                new AppException(ErrorCode.NOT_FOUND));
+                new AppException(ErrorCodeFail.NOT_FOUND));
         book.getCategories().clear();
         bookRepository.save(book);
         bookRepository.delete(book);
@@ -156,7 +153,7 @@ public class BookService implements IBookService {
     public Book updateBook(BookRequestDTO request, Long id) {
         //find book by id
         Book book = bookRepository.findById(id).orElseThrow(() ->
-                new AppException(ErrorCode.NOT_FOUND));
+                new AppException(ErrorCodeFail.NOT_FOUND));
         //get the old category
         Set<Category> oldCate = book.getCategories();
 

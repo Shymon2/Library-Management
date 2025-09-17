@@ -5,7 +5,7 @@ import Library.Project.constant.RolePermissions;
 import Library.Project.entity.InvalidatedToken;
 import Library.Project.entity.Role;
 import Library.Project.entity.User;
-import Library.Project.enums.ErrorCode;
+import Library.Project.constant.enums.ErrorCodeFail;
 import Library.Project.exception.AppException;
 import Library.Project.repository.InvalidatedTokenRepository;
 import Library.Project.service.interfaces.IAuthenticationService;
@@ -53,7 +53,7 @@ public class AuthenticationService implements IAuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         User user = userService.findUserByUserName(request.getUsername());
         if(user == null)
-            throw new AppException(ErrorCode.USERNAME_PASSWORD_INCORRECT);
+            throw new AppException(ErrorCodeFail.USERNAME_PASSWORD_INCORRECT);
 
         PasswordEncoder encoder = new BCryptPasswordEncoder(10);
 
@@ -88,7 +88,7 @@ public class AuthenticationService implements IAuthenticationService {
     }
 
     @Override
-    public void logout(LogoutRequest request) throws ParseException, JOSEException {
+    public Objects logout(LogoutRequest request) throws ParseException, JOSEException {
 
         SignedJWT signToken = verifier(request.getToken());
 
@@ -102,16 +102,20 @@ public class AuthenticationService implements IAuthenticationService {
                         .build();
 
         invalidatedTokenRepository.save(invalidatedToken);
+
+        return null;
     }
 
     @Override
-    public void removeOverDateToken(){
+    public Objects removeOverDateToken(){
         List<InvalidatedToken> invalidatedTokens = invalidatedTokenRepository.findAll();
 
         invalidatedTokens.forEach(a -> {
             if(a.getExpiryTime().after(new Date()))
                 invalidatedTokens.remove(a);
         });
+
+        return null;
     }
 
 
@@ -170,14 +174,14 @@ public class AuthenticationService implements IAuthenticationService {
                 Arrays.stream(RolePermissions.user_permission).forEach(stringJoiner::add);
             } else {
                 if(roleService.checkExits(user.getRole()))
-                    throw new AppException(ErrorCode.NOT_FOUND);
+                    throw new AppException(ErrorCodeFail.NOT_FOUND);
                 else{
                     Role role = roleService.findByName(user.getRole());
                     role.getPermissions().forEach(a -> stringJoiner.add(a.getName()));
                 }
             }
         }
-        else throw new AppException(ErrorCode.NOT_FOUND);
+        else throw new AppException(ErrorCodeFail.NOT_FOUND);
 
         return stringJoiner.toString();
     }

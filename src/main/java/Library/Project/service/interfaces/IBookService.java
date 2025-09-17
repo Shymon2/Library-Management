@@ -6,12 +6,14 @@ import Library.Project.entity.Book;
 import Library.Project.dto.Request.Library.BookRequestDTO;
 import Library.Project.dto.Response.ApiResponse.PageResponse;
 
+import java.util.List;
+
 public interface IBookService {
-    Book findBookById(Long id);
+    BookDetailResponse findBookByName(String name);
 
     Book addNewBook(BookRequestDTO request);
 
-    PageResponse findBooksByCriteria(BookSearchRequest request, int pageNo, int pageSize);
+    PageResponse<List<BookDetailResponse>> findBooksByCriteria(BookSearchRequest request, int pageNo, int pageSize);
 
     PageResponse findALlBook(int pageNo, int pageSize);
 

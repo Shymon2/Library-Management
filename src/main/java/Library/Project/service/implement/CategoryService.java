@@ -2,7 +2,7 @@ package Library.Project.service.implement;
 
 import Library.Project.entity.Book;
 import Library.Project.entity.Category;
-import Library.Project.enums.ErrorCode;
+import Library.Project.constant.enums.ErrorCodeFail;
 import Library.Project.exception.AppException;
 import Library.Project.repository.CategoryRepository;
 import Library.Project.dto.Request.Library.CategoryDTO;
@@ -29,7 +29,7 @@ public class CategoryService implements ICategoryService {
     public Category addNewCategory(CategoryDTO request) {
         if (existsByCategoryName(request.getCategoryName())) {
             log.info("Category already existed");
-            throw new AppException(ErrorCode.ALREADY_EXISTED);
+            throw new AppException(ErrorCodeFail.ALREADY_EXISTED);
         }
         else {
             Category category = Category.builder()
@@ -45,7 +45,7 @@ public class CategoryService implements ICategoryService {
     @Override
     public CategoryDetailResponse getCategoryById(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow(() ->
-                new AppException(ErrorCode.NOT_FOUND));
+                new AppException(ErrorCodeFail.NOT_FOUND));
         return CategoryDetailResponse.builder()
                 .categoryName(category.getCategoryName())
                 .build();
@@ -55,7 +55,7 @@ public class CategoryService implements ICategoryService {
     public Category getCategoryByName(String categoryName) {
         Category category = categoryRepository.findByCategoryName(categoryName);
         if(category == null)
-            throw new AppException(ErrorCode.NOT_FOUND);
+            throw new AppException(ErrorCodeFail.NOT_FOUND);
         return category;
     }
 
@@ -63,7 +63,7 @@ public class CategoryService implements ICategoryService {
     public PageResponse getAllCategories(int pageNo, int pageSize) {
         Page<Category> categoriesFound = categoryRepository.findAll(PageRequest.of(pageNo - 1, pageSize));
         if (categoriesFound.isEmpty()) {
-            throw new AppException(ErrorCode.NOT_FOUND);
+            throw new AppException(ErrorCodeFail.NOT_FOUND);
         }
         List<CategoryDetailResponse> categoryList = categoriesFound.stream().map(c -> CategoryDetailResponse.builder()
                         .categoryName(c.getCategoryName())
@@ -81,7 +81,7 @@ public class CategoryService implements ICategoryService {
     @Override
     public Category updateCategory(CategoryDTO request, Long id) {
         Category category = categoryRepository.findById(id).orElseThrow(() ->
-                new AppException(ErrorCode.NOT_FOUND));
+                new AppException(ErrorCodeFail.NOT_FOUND));
         category.setCategoryName(request.getCategoryName());
         categoryRepository.save(category);
         return category;
@@ -90,7 +90,7 @@ public class CategoryService implements ICategoryService {
     @Override
     public Category deleteCategory(Long id) {
         Category categoryFound = categoryRepository.findById(id).orElseThrow(() ->
-                new AppException(ErrorCode.NOT_FOUND));
+                new AppException(ErrorCodeFail.NOT_FOUND));
         for(Book book : categoryFound.getBooks()){
             book.getCategories().remove(categoryFound);
         }

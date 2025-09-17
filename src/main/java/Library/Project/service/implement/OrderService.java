@@ -2,8 +2,8 @@ package Library.Project.service.implement;
 
 import Library.Project.configuration.Translator;
 import Library.Project.entity.CartItem;
-import Library.Project.enums.ErrorCode;
-import Library.Project.enums.OrderStatus;
+import Library.Project.constant.enums.ErrorCodeFail;
+import Library.Project.constant.enums.OrderStatus;
 import Library.Project.entity.Orders;
 import Library.Project.entity.OrderItem;
 import Library.Project.entity.User;
@@ -71,7 +71,7 @@ public class OrderService implements IOrderService {
     @Override
     public void approveOrder(Long orderId) {
         Orders order = orderRepository.findById(orderId).orElseThrow(() ->
-                new AppException(ErrorCode.NOT_FOUND));
+                new AppException(ErrorCodeFail.NOT_FOUND));
         if (order.getStatus() != OrderStatus.PENDING) {
             throw new IllegalStateException(Translator.toLocale("order.only.pending"));
         }
@@ -82,7 +82,7 @@ public class OrderService implements IOrderService {
     @Override
     public void borrowBook(Long orderId) {
         Orders order = orderRepository.findById(orderId).orElseThrow(() ->
-                new AppException(ErrorCode.NOT_FOUND));
+                new AppException(ErrorCodeFail.NOT_FOUND));
         if (order.getStatus() != OrderStatus.APPROVED) {
             throw new IllegalStateException(Translator.toLocale("order.only.approve"));
         }
@@ -93,7 +93,7 @@ public class OrderService implements IOrderService {
     @Override
     public void returnBook(Long orderId) {
         Orders order = orderRepository.findById(orderId).orElseThrow(() ->
-                new AppException(ErrorCode.NOT_FOUND));
+                new AppException(ErrorCodeFail.NOT_FOUND));
         if (order.getStatus() == OrderStatus.BORROWED) {
             order.setStatus(OrderStatus.RETURNED);
 
@@ -121,7 +121,7 @@ public class OrderService implements IOrderService {
     @Override
     public void cancelOrder(Long orderId) {
         Orders order = orderRepository.findById(orderId).orElseThrow(() ->
-                new AppException(ErrorCode.NOT_FOUND));
+                new AppException(ErrorCodeFail.NOT_FOUND));
         if (order.getStatus() != OrderStatus.PENDING) {
             throw new IllegalStateException(Translator.toLocale("order.only.pending"));
         }

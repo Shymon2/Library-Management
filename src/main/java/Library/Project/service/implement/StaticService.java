@@ -1,6 +1,6 @@
 package Library.Project.service.implement;
 
-import Library.Project.enums.ErrorCode;
+import Library.Project.constant.enums.ErrorCodeFail;
 import Library.Project.exception.AppException;
 import Library.Project.repository.BookRepository;
 import Library.Project.repository.CategoryRepository;
@@ -26,7 +26,7 @@ public class StaticService implements IStaticService {
     public List<CategoryStaticResponse> numBookByCate() {
         List<BooksByCateProjection> list = categoryRepository.findNumBookByCategoryName();
         if(list.isEmpty())
-            throw new AppException(ErrorCode.NOT_FOUND);
+            throw new AppException(ErrorCodeFail.NOT_FOUND);
         return list.stream().map(a ->
              CategoryStaticResponse.builder()
                     .category(a.getCategory())
@@ -38,7 +38,7 @@ public class StaticService implements IStaticService {
     public List<BookTrendResponse> top5BookOrder() {
         List<BookTrendProjection> list = bookRepository.findTop5BookOrder();
         if(list.isEmpty())
-            throw new AppException(ErrorCode.NOT_FOUND);
+            throw new AppException(ErrorCodeFail.NOT_FOUND);
         return list.stream().map(a ->
                 BookTrendResponse.builder()
                         .title(a.getTitle())

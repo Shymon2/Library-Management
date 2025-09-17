@@ -1,7 +1,7 @@
 package Library.Project.configuration;
 
 import Library.Project.dto.Response.ApiResponse.ResponseError;
-import Library.Project.enums.ErrorCode;
+import Library.Project.constant.enums.ErrorCodeFail;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,14 +16,14 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
             throws IOException, ServletException {
-        ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
+        ErrorCodeFail errorCodeFail = ErrorCodeFail.UNAUTHENTICATED;
 
-        response.setStatus(errorCode.getStatusCode().value());
+        response.setStatus(errorCodeFail.getStatusCode().value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        response.getWriter().write(objectMapper.writeValueAsString(new ResponseError(errorCode.getCode(), errorCode.getMessage())));
+        response.getWriter().write(objectMapper.writeValueAsString(new ResponseError(errorCodeFail.getCode(), errorCodeFail.getMessage())));
         response.flushBuffer();
     }
 }

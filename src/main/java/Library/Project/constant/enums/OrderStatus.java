@@ -1,4 +1,4 @@
-package Library.Project.enums;
+package Library.Project.constant.enums;
 
 public enum OrderStatus {
         PENDING,

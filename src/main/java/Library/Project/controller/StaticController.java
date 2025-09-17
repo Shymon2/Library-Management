@@ -1,10 +1,8 @@
 package Library.Project.controller;
 
 import Library.Project.configuration.Translator;
-import Library.Project.service.implement.StaticService;
 import Library.Project.dto.Response.LibraryResponse.BookTrendResponse;
 import Library.Project.dto.Response.LibraryResponse.CategoryStaticResponse;
-import Library.Project.dto.Response.ApiResponse.ResponseData;
 import Library.Project.service.interfaces.IStaticService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;

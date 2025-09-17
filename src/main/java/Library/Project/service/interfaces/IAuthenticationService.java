@@ -14,8 +14,8 @@ public interface IAuthenticationService {
 
     IntrospectResponse introspectToken(IntrospectRequest request) throws JOSEException, ParseException;
 
-    void logout(LogoutRequest token) throws ParseException, JOSEException;
+    Object logout(LogoutRequest token) throws ParseException, JOSEException;
 
-    void removeOverDateToken();
+    Object removeOverDateToken();
 
 }

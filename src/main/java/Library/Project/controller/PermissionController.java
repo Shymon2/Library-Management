@@ -4,8 +4,6 @@ import Library.Project.configuration.Translator;
 import Library.Project.dto.Request.User.PermissionRequest;
 import Library.Project.dto.Response.ApiResponse.PageResponse;
 import Library.Project.dto.Response.UserResponse.PermissionResponse;
-import Library.Project.dto.Response.ApiResponse.ResponseData;
-import Library.Project.service.implement.PermissionService;
 import Library.Project.service.interfaces.IPermissionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

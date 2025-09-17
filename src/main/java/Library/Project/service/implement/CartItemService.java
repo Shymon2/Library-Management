@@ -3,7 +3,7 @@ package Library.Project.service.implement;
 import Library.Project.dto.Response.CartResponse.CartItemResponse;
 import Library.Project.dto.Response.CartResponse.UserCartResponse;
 import Library.Project.entity.User;
-import Library.Project.enums.ErrorCode;
+import Library.Project.constant.enums.ErrorCodeFail;
 import Library.Project.exception.AppException;
 import Library.Project.entity.Book;
 import Library.Project.entity.CartItem;
@@ -32,7 +32,7 @@ public class CartItemService implements ICartItemService {
             CartItem cartItem = getCartItem(userId, bookId);
             int newQuantity = cartItem.getQuantity() + quantity;
             if(newQuantity > bookService.findBookById(bookId).getQuantity())
-                throw new AppException(ErrorCode.BOOK_QUANTITY_EXCEED);
+                throw new AppException(ErrorCodeFail.BOOK_QUANTITY_EXCEED);
             else{
                 cartItem.setQuantity(newQuantity);
                 cartItemRepository.save(cartItem);
@@ -51,7 +51,7 @@ public class CartItemService implements ICartItemService {
                     .user(user)
                     .build();
             if (quantity > book.getQuantity()) {
-                throw new AppException(ErrorCode.BOOK_QUANTITY_EXCEED);
+                throw new AppException(ErrorCodeFail.BOOK_QUANTITY_EXCEED);
             } else {
                 cartItem.setBook(book);
                 cartItem.setQuantity(quantity);
@@ -69,7 +69,7 @@ public class CartItemService implements ICartItemService {
     public CartItemResponse removeItemFromCart(Long userId, Long bookId) {
         CartItem cartItem = cartItemRepository.findByUserIdAndBookId(userId, bookId);
         if(cartItem == null)
-            throw new AppException(ErrorCode.NOT_FOUND);
+            throw new AppException(ErrorCodeFail.NOT_FOUND);
         cartItem.setDelete(true);
         return CartItemResponse.builder()
                 .book(cartItem.getBook())
@@ -82,7 +82,7 @@ public class CartItemService implements ICartItemService {
     public CartItem getCartItem(Long userId, Long bookId){
         CartItem item = cartItemRepository.findByUserIdAndBookId(userId, bookId);
         if(item == null)
-            throw new AppException(ErrorCode.NOT_FOUND);
+            throw new AppException(ErrorCodeFail.NOT_FOUND);
         return item;
     }
 
@@ -91,7 +91,7 @@ public class CartItemService implements ICartItemService {
         User user = userService.getUserById(userId);
         Book book = bookService.findBookById(bookId);
         if(quantity > book.getQuantity()){
-            throw new AppException(ErrorCode.BOOK_QUANTITY_EXCEED);
+            throw new AppException(ErrorCodeFail.BOOK_QUANTITY_EXCEED);
         }
         else {
             CartItem cartItem = getCartItem(userId, bookId);

@@ -2,11 +2,9 @@ package Library.Project.controller;
 
 import Library.Project.configuration.Translator;
 import Library.Project.entity.Category;
-import Library.Project.service.implement.CategoryService;
 import Library.Project.dto.Request.Library.CategoryDTO;
 import Library.Project.dto.Response.LibraryResponse.CategoryDetailResponse;
 import Library.Project.dto.Response.ApiResponse.PageResponse;
-import Library.Project.dto.Response.ApiResponse.ResponseData;
 import Library.Project.service.interfaces.ICategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;

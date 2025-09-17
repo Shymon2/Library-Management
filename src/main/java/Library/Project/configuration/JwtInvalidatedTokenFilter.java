@@ -1,7 +1,7 @@
 package Library.Project.configuration;
 
 import Library.Project.dto.Response.ApiResponse.ResponseError;
-import Library.Project.enums.ErrorCode;
+import Library.Project.constant.enums.ErrorCodeFail;
 import Library.Project.exception.AppException;
 import Library.Project.repository.InvalidatedTokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,16 +37,16 @@ public class JwtInvalidatedTokenFilter extends OncePerRequestFilter {
                     filterChain.doFilter(request, response);
                 } else {
 
-                    ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
-                    response.setStatus(errorCode.getStatusCode().value());
+                    ErrorCodeFail errorCodeFail = ErrorCodeFail.UNAUTHENTICATED;
+                    response.setStatus(errorCodeFail.getStatusCode().value());
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     ObjectMapper objectMapper = new ObjectMapper();
                     response.getWriter().write(objectMapper.writeValueAsString(
-                            new ResponseError(errorCode.getCode(), errorCode.getMessage())));
+                            new ResponseError(errorCodeFail.getCode(), errorCodeFail.getMessage())));
                     response.flushBuffer();
                 }
             } catch (ParseException e) {
-                throw new AppException(ErrorCode.TOKEN_INVALID);
+                throw new AppException(ErrorCodeFail.TOKEN_INVALID);
             }
         } else {
             filterChain.doFilter(request, response);

@@ -1,6 +1,6 @@
 package Library.Project.entity;
 
-import Library.Project.enums.OrderStatus;
+import Library.Project.constant.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

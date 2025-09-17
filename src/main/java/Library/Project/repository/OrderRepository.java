@@ -1,6 +1,6 @@
 package Library.Project.repository;
 
-import Library.Project.enums.OrderStatus;
+import Library.Project.constant.enums.OrderStatus;
 import Library.Project.entity.Orders;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

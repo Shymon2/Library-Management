@@ -1,6 +1,6 @@
 package Library.Project.dto.Response.OrderResponse;
 
-import Library.Project.enums.OrderStatus;
+import Library.Project.constant.enums.OrderStatus;
 import Library.Project.entity.OrderItem;
 import jakarta.persistence.*;
 import lombok.Builder;

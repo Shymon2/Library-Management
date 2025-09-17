@@ -1,8 +1,8 @@
 package Library.Project.service.implement;
 
 import Library.Project.dto.Response.ApiResponse.PageResponse;
-import Library.Project.enums.ErrorCode;
-import Library.Project.enums.Role;
+import Library.Project.constant.enums.ErrorCodeFail;
+import Library.Project.constant.enums.Role;
 import Library.Project.entity.User;
 import Library.Project.exception.AppException;
 import Library.Project.repository.UserRepository;
@@ -34,7 +34,7 @@ public class UserService implements IUserService {
     @Override
     public User getUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow(() ->
-                new AppException(ErrorCode.NOT_FOUND));
+                new AppException(ErrorCodeFail.NOT_FOUND));
     }
 
     @Override
@@ -79,7 +79,7 @@ public class UserService implements IUserService {
 
                     userRepository.save(user);
                     return convertToInforResponse(user);
-                }).orElseThrow(() -> new AppException(ErrorCode.ALREADY_EXISTED));
+                }).orElseThrow(() -> new AppException(ErrorCodeFail.ALREADY_EXISTED));
     }
 
     @Override
@@ -90,7 +90,7 @@ public class UserService implements IUserService {
             existingUser.setDateOfBirth(request.getDateOfBirth());
             existingUser.setAddress(request.getAddress());
             return convertToInforResponse(userRepository.save(existingUser));
-        }).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+        }).orElseThrow(() -> new AppException(ErrorCodeFail.NOT_FOUND));
     }
 
     @Override

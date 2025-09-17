@@ -6,7 +6,7 @@ import Library.Project.dto.Response.ApiResponse.PageResponse;
 import Library.Project.dto.Response.UserResponse.RoleResponse;
 import Library.Project.entity.Permission;
 import Library.Project.entity.Role;
-import Library.Project.enums.ErrorCode;
+import Library.Project.constant.enums.ErrorCodeFail;
 import Library.Project.exception.AppException;
 import Library.Project.repository.RoleRepository;
 import Library.Project.service.interfaces.IRoleService;
@@ -111,13 +111,13 @@ public class RoleService implements IRoleService {
 
     public Role findByName(String name){
         if(checkExits(name))
-            throw new AppException(ErrorCode.ALREADY_EXISTED);
+            throw new AppException(ErrorCodeFail.ALREADY_EXISTED);
         else
             return roleRepository.findByName(name);
     }
 
     public Role findById(Long id){
         return roleRepository.findById(id).orElseThrow(() ->
-                new AppException(ErrorCode.NOT_FOUND));
+                new AppException(ErrorCodeFail.NOT_FOUND));
     }
 }

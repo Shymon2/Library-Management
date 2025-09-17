@@ -17,15 +17,15 @@ public class ClientTemplateImpl implements ClientTemplate {
 
     @Override
     public <R> ResponseEntity<R> get(String uri, HttpHeaders headers, ParameterizedTypeReference<R> response) {
-        return null;
+        return exchangeParameterized(uri, HttpMethod.GET, new HttpEntity<>(headers), response);
     }
 
     @Override
     public <R> ResponseEntity<R> post(String uri, HttpHeaders headers, ParameterizedTypeReference<R> response) {
-        return null;
+        return exchangeParameterized(uri, HttpMethod.POST, new HttpEntity<>(headers), response);
     }
 
-    private <R> ResponseEntity<R> exchangeParameterized(String url, HttpMethod httpMethod, HttpEntity<Object> entity, ParameterizedTypeReference<R> responseClass, Object... uriVariables) {
-        return restTemplate.exchange(url, httpMethod, entity, responseClass, uriVariables);
+    private <R> ResponseEntity<R> exchangeParameterized(String url, HttpMethod httpMethod, HttpEntity<Object> entity, ParameterizedTypeReference<R> responseClass) {
+        return restTemplate.exchange(url, httpMethod, entity, responseClass);
     }
 }
