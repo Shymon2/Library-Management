@@ -1,7 +1,7 @@
 package Library.Project.repository;
 
 import Library.Project.entity.Category;
-import Library.Project.dto.Request.Library.BooksByCateProjection;
+import Library.Project.dto.request.library.BooksByCateProjection;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

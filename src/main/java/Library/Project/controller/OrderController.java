@@ -4,7 +4,7 @@ import Library.Project.configuration.Translator;
 import Library.Project.constant.enums.OrderStatus;
 import Library.Project.entity.Orders;
 import Library.Project.entity.User;
-import Library.Project.dto.Response.OrderResponse.OrderInforResponse;
+import Library.Project.dto.response.OrderResponse.OrderInforResponse;
 import Library.Project.service.interfaces.IOrderService;
 import Library.Project.service.interfaces.IUserService;
 import io.swagger.v3.oas.annotations.Operation;

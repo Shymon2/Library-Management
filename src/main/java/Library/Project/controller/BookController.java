@@ -1,12 +1,10 @@
 package Library.Project.controller;
 
-import Library.Project.configuration.Translator;
 import Library.Project.dto.GeneralPayload;
-import Library.Project.dto.Request.Library.BookSearchRequest;
-import Library.Project.entity.Book;
-import Library.Project.dto.Request.Library.BookRequestDTO;
-import Library.Project.dto.Response.LibraryResponse.BookDetailResponse;
-import Library.Project.dto.Response.ApiResponse.PageResponse;
+import Library.Project.dto.request.library.BookSearchRequest;
+import Library.Project.dto.request.library.BookRequestDTO;
+import Library.Project.dto.response.LibraryResponse.BookDetailResponse;
+import Library.Project.dto.response.ApiResponse.PageResponse;
 import Library.Project.service.RestfulResponseFactory;
 import Library.Project.service.interfaces.IBookService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,58 +34,47 @@ public class BookController {
     @Operation(summary = "Find book by ID", description = "ID must be positive")
     @SecurityRequirements
     @GetMapping("/find-by-name")
-    public ResponseEntity<GeneralPayload<BookDetailResponse>> getBookByName(@RequestParam String name) {
+    public ResponseEntity<GeneralPayload<Object>> getBookByName(@RequestParam String name) {
         return RestfulResponseFactory.of(bookService.findBookByName(name));
     }
 
     @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Add new Book")
     @PostMapping("/add")
-    public ResponseData<BookDetailResponse> addNewBook(HttpServletRequest httpServletRequest, @Valid @RequestBody BookRequestDTO request) {
-        if (bookService.existsByTitleAndAuthor(request.getTitle(), request.getAuthor())) {
-            Book updateBook = bookService.addNewBook(request);
-            return new ResponseData<>(1000, Translator.toLocale("book.update.instead"), bookService.convertToResponse(updateBook));
-        } else {
-            Book newBook = bookService.addNewBook(request);
-            return new ResponseData<>(1000, Translator.toLocale("book.add.success"), bookService.convertToResponse(newBook));
-        }
-
+    public ResponseEntity<GeneralPayload<Object>> addNewBook(HttpServletRequest httpServletRequest, @Valid @RequestBody BookRequestDTO request) {
+        return RestfulResponseFactory.of(bookService.addNewBook(request));
     }
 
     @Operation(summary = "Find book by criteria")
     @SecurityRequirements
     @PostMapping("/find-by-criteria")
-    public ResponseData<PageResponse<List<BookDetailResponse>>> findByCriteria(@RequestBody BookSearchRequest request,
+    public ResponseEntity<GeneralPayload<PageResponse<List<BookDetailResponse>>>> findByCriteria(@RequestBody BookSearchRequest request,
                                                                                @RequestParam int pageNo,
                                                                                @RequestParam int pageSize){
-        return new ResponseData<>(1000, Translator.toLocale("book.found.success"), bookService.findBooksByCriteria(request, pageNo, pageSize));
+        return RestfulResponseFactory.of(bookService.findBooksByCriteria(request, pageNo, pageSize));
     }
 
     @Operation(summary = "Show all books")
     @SecurityRequirements
     @GetMapping("/all")
-    public ResponseData<PageResponse> getAllBook(@RequestParam @Min(1) int pageNo, @RequestParam @Min(1) int pageSize) {
-
-        PageResponse bookFound = bookService.findALlBook(pageNo, pageSize);
-        return new ResponseData<>(1000, Translator.toLocale("book.found.success"), bookFound);
-
+    public ResponseEntity<GeneralPayload<PageResponse<List<BookDetailResponse>>>> getAllBook(@RequestParam @Min(1) int pageNo, @RequestParam @Min(1) int pageSize) {
+        return RestfulResponseFactory.of(bookService.findALlBook(pageNo, pageSize));
     }
 
     @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Delete book by Id")
     @DeleteMapping("/delete")
-    public ResponseData<String> deleteBookById(HttpServletRequest httpServletRequest, @RequestParam Long id) {
-        bookService.deleteBookById(id);
-        return new ResponseData<>(1000, Translator.toLocale("book.delete.success"));
-
+    public ResponseEntity<GeneralPayload<Object>> deleteBookById(HttpServletRequest httpServletRequest, @RequestParam Long id) {
+        return RestfulResponseFactory.of(bookService.deleteBookById(id));
     }
 
     @PreAuthorize("fileRole(#httpServletRequest)")
     @Operation(summary = "Update book by Id")
     @PutMapping("/update")
-    public ResponseData<BookDetailResponse> updateBookById(HttpServletRequest httpServletRequest, @RequestParam Long id, @Valid @RequestBody BookRequestDTO request) {
-        Book book = bookService.updateBook(request, id);
-        return new ResponseData<>(1000, Translator.toLocale("book.update.success"), bookService.convertToResponse(book));
+    public ResponseEntity<GeneralPayload<Object>> updateBookById(HttpServletRequest httpServletRequest,
+                                                                             @RequestParam Long id,
+                                                                             @Valid @RequestBody BookRequestDTO request) {
+        return RestfulResponseFactory.of(bookService.updateBook(request, id));
     }
 
 }

@@ -1,7 +1,7 @@
 package Library.Project.exception;
 
 import Library.Project.constant.enums.ErrorCodeFail;
-import Library.Project.dto.Response.ApiResponse.ResponseError;
+import Library.Project.dto.response.ApiResponse.ResponseError;
 import com.nimbusds.jose.JOSEException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;

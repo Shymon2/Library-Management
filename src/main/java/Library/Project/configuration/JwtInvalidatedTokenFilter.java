@@ -1,6 +1,6 @@
 package Library.Project.configuration;
 
-import Library.Project.dto.Response.ApiResponse.ResponseError;
+import Library.Project.dto.response.ApiResponse.ResponseError;
 import Library.Project.constant.enums.ErrorCodeFail;
 import Library.Project.exception.AppException;
 import Library.Project.repository.InvalidatedTokenRepository;

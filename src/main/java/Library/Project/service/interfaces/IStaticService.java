@@ -1,7 +1,7 @@
 package Library.Project.service.interfaces;
 
-import Library.Project.dto.Response.LibraryResponse.BookTrendResponse;
-import Library.Project.dto.Response.LibraryResponse.CategoryStaticResponse;
+import Library.Project.dto.response.LibraryResponse.BookTrendResponse;
+import Library.Project.dto.response.LibraryResponse.CategoryStaticResponse;
 
 import java.util.List;
 

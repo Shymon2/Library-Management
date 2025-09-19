@@ -1,14 +1,14 @@
 package Library.Project.service.implement;
 
-import Library.Project.dto.Response.ApiResponse.PageResponse;
+import Library.Project.dto.response.ApiResponse.PageResponse;
 import Library.Project.constant.enums.ErrorCodeFail;
 import Library.Project.constant.enums.Role;
 import Library.Project.entity.User;
 import Library.Project.exception.AppException;
 import Library.Project.repository.UserRepository;
-import Library.Project.dto.Request.User.UpdateUserDTO;
-import Library.Project.dto.Request.User.UserDTO;
-import Library.Project.dto.Response.UserResponse.UserInforResponse;
+import Library.Project.dto.request.User.UpdateUserDTO;
+import Library.Project.dto.request.User.UserDTO;
+import Library.Project.dto.response.UserResponse.UserInforResponse;
 import Library.Project.service.interfaces.IUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

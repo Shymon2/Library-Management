@@ -1,8 +1,7 @@
 package Library.Project.repository;
 
-import Library.Project.dto.Request.Library.BookSearchRequest;
 import Library.Project.entity.Book;
-import Library.Project.dto.Request.Library.BookTrendProjection;
+import Library.Project.dto.request.library.BookTrendProjection;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +13,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Repository
@@ -45,6 +43,11 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             Pageable pageable
     );
 
-    @Query(value = "", nativeQuery = true)
-    Optional<Book> findBookByName(String name);
+    @Query(value = "select * " +
+            "from book as b " +
+            "where b.isDelete = false " +
+            "and lower(b.title) like lower(concat('%', :name, '%'))", nativeQuery = true)
+    List<Book> findBookByName(@Param("name") String name);
+
+    Book findBookById(Long bookId);
 }

@@ -1,9 +1,9 @@
 package Library.Project.controller;
 
 import Library.Project.configuration.Translator;
-import Library.Project.dto.Request.User.PermissionRequest;
-import Library.Project.dto.Response.ApiResponse.PageResponse;
-import Library.Project.dto.Response.UserResponse.PermissionResponse;
+import Library.Project.dto.request.User.PermissionRequest;
+import Library.Project.dto.response.ApiResponse.PageResponse;
+import Library.Project.dto.response.UserResponse.PermissionResponse;
 import Library.Project.service.interfaces.IPermissionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

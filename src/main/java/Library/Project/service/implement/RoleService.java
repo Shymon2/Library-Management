@@ -1,9 +1,9 @@
 package Library.Project.service.implement;
 
-import Library.Project.dto.Request.User.PermissionRequest;
-import Library.Project.dto.Request.User.RoleRequest;
-import Library.Project.dto.Response.ApiResponse.PageResponse;
-import Library.Project.dto.Response.UserResponse.RoleResponse;
+import Library.Project.dto.request.User.PermissionRequest;
+import Library.Project.dto.request.User.RoleRequest;
+import Library.Project.dto.response.ApiResponse.PageResponse;
+import Library.Project.dto.response.UserResponse.RoleResponse;
 import Library.Project.entity.Permission;
 import Library.Project.entity.Role;
 import Library.Project.constant.enums.ErrorCodeFail;

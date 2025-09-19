@@ -1,42 +1,48 @@
 package Library.Project.service.implement;
 
-import Library.Project.dto.Request.Library.BookSearchRequest;
+import Library.Project.dto.request.library.BookSearchRequest;
 import Library.Project.entity.Book;
 import Library.Project.entity.Category;
 import Library.Project.constant.enums.ErrorCodeFail;
 import Library.Project.exception.AppException;
 import Library.Project.repository.BookRepository;
 import Library.Project.service.interfaces.IBookService;
-import Library.Project.dto.Request.Library.BookRequestDTO;
-import Library.Project.dto.Request.Library.CategoryDTO;
-import Library.Project.dto.Response.LibraryResponse.BookDetailResponse;
-import Library.Project.dto.Response.ApiResponse.PageResponse;
-//import Library.Project.specification.BookSpecification;
+import Library.Project.dto.request.library.BookRequestDTO;
+import Library.Project.dto.request.library.CategoryDTO;
+import Library.Project.dto.response.LibraryResponse.BookDetailResponse;
+import Library.Project.dto.response.ApiResponse.PageResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class BookService implements IBookService {
-
+    private final ObjectMapper objectMapper;
     private final BookRepository bookRepository;
     private final CategoryService categoryService;
 
 
     @Override
-    public BookDetailResponse findBookByName(String name) {
-        Book book =  bookRepository.findById(id).orElseThrow(() ->
-                new AppException(ErrorCodeFail.NOT_FOUND));
+    public List<BookDetailResponse> findBookByName(String name) {
+        List<Book> book = bookRepository.findBookByName(name);
+
+        if (Objects.isNull(book))
+            throw new AppException(ErrorCodeFail.NOT_FOUND);
+
+        List<BookDetailResponse> res = new ArrayList<>();
+        for (Book b : book) {
+            res.add(objectMapper.convertValue(b, BookDetailResponse.class));
+        }
+
+        return res;
     }
 
     private Set<CategoryDTO> convertToCategoryDTO(Set<Category> categories) {
@@ -51,42 +57,39 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public Book addNewBook(BookRequestDTO request) {
-        if (existsByTitleAndAuthor(request.getTitle(), request.getAuthor())){
-            Book book = bookRepository.findBookByTitleAndAuthor(request.getTitle(), request.getAuthor());
-            book = updateBook(request, book.getId());
-            bookRepository.save(book);
-            return book;
+    public Object addNewBook(BookRequestDTO request) {
+        if (existsByTitleAndAuthor(request.getTitle(), request.getAuthor())) {
+            throw new AppException(ErrorCodeFail.ALREADY_EXISTED);
         }
-        else {
-            Book newbook = Book.builder()
-                    .title(request.getTitle())
-                    .author(request.getAuthor())
-                    .quantity(request.getQuantity())
-                    .categories(new HashSet<>())
-                    .build();
 
-            //remove duplicate category
-            Set<String> newCategoryName = new HashSet<>();
-            request.getCategories().forEach(a -> newCategoryName.add(a.getCategoryName()));
+        Book newbook = Book.builder()
+                .title(request.getTitle())
+                .author(request.getAuthor())
+                .quantity(request.getQuantity())
+                .categories(new HashSet<>())
+                .build();
 
-            newCategoryName.forEach(a -> {
-                Category category;
+        //remove duplicate category
+        Set<String> newCategoryName = new HashSet<>();
+        request.getCategories().forEach(a -> newCategoryName.add(a.getCategoryName()));
 
-                if (categoryService.existsByCategoryName(a)) {
-                    // Fetch the existing Category entity
-                    category = categoryService.getCategoryByName(a);
-                } else {
-                    // Create and save a new Category entity
-                    category = new Category();
-                    category.setCategoryName(a);
-                }
-                // Add category to the Book
-                newbook.saveCategory(category);
-            });
-            bookRepository.save(newbook);
-            return newbook;
-        }
+        newCategoryName.forEach(a -> {
+            Category category;
+
+            if (categoryService.existsByCategoryName(a)) {
+                // Fetch the existing Category entity
+                category = categoryService.getCategoryByName(a);
+            } else {
+                // Create and save a new Category entity
+                category = new Category();
+                category.setCategoryName(a);
+            }
+            // Add category to the Book
+            newbook.saveCategory(category);
+        });
+        bookRepository.save(newbook);
+
+        return null;
     }
 
     @Override
@@ -116,9 +119,9 @@ public class BookService implements IBookService {
 
 
     @Override
-    public PageResponse findALlBook(int pageNo, int pageSize) {
+    public PageResponse<List<BookDetailResponse>> findALlBook(int pageNo, int pageSize) {
         Page<Book> bookFound = bookRepository.findBookByIsDelete(PageRequest.of(pageNo - 1, pageSize), false);
-        if(bookFound.isEmpty()){
+        if (bookFound.isEmpty()) {
             throw new AppException(ErrorCodeFail.NOT_FOUND);
         }
         List<BookDetailResponse> bookList = new ArrayList<>();
@@ -132,7 +135,7 @@ public class BookService implements IBookService {
                     .categories(cateList)
                     .build());
         });
-        return PageResponse.builder()
+        return PageResponse.<List<BookDetailResponse>>builder()
                 .pageNo(pageNo)
                 .pageSize(pageSize)
                 .totalPage(bookFound.getTotalPages())
@@ -141,16 +144,18 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public void deleteBookById(Long id) {
+    public Object deleteBookById(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(() ->
                 new AppException(ErrorCodeFail.NOT_FOUND));
         book.getCategories().clear();
         bookRepository.save(book);
         bookRepository.delete(book);
+
+        return null;
     }
 
     @Override
-    public Book updateBook(BookRequestDTO request, Long id) {
+    public Object updateBook(BookRequestDTO request, Long id) {
         //find book by id
         Book book = bookRepository.findById(id).orElseThrow(() ->
                 new AppException(ErrorCodeFail.NOT_FOUND));
@@ -190,29 +195,20 @@ public class BookService implements IBookService {
 
         bookRepository.save(book);
 
-        return book;
+        return null;
     }
 
     @Override
     public void updateBookQuantity(Long bookId, int quantity) {
-        Book book = findBookById(bookId);
+        Book book = bookRepository.findBookById(bookId);
         book.setQuantity(quantity);
         bookRepository.save(book);
     }
 
     @Override
     public Boolean existsByTitleAndAuthor(String title, String author) {
-        return bookRepository.existsByTitleAndAuthor(title, author) ;
+        return bookRepository.existsByTitleAndAuthor(title, author);
     }
 
-    public BookDetailResponse convertToResponse(Book book){
-        Set<String> categories = new HashSet<>();
-        book.getCategories().forEach(a -> categories.add(a.getCategoryName()));
-        return BookDetailResponse.builder()
-                .title(book.getTitle())
-                .author(book.getAuthor())
-                .quantity(book.getQuantity())
-                .categories(categories)
-                .build();
-    }
+
 }

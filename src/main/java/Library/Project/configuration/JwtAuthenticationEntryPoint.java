@@ -1,6 +1,6 @@
 package Library.Project.configuration;
 
-import Library.Project.dto.Response.ApiResponse.ResponseError;
+import Library.Project.dto.response.ApiResponse.ResponseError;
 import Library.Project.constant.enums.ErrorCodeFail;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

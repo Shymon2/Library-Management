@@ -1,6 +1,6 @@
 package Library.Project.service.interfaces;
 
-import Library.Project.dto.Response.OrderResponse.OrderInforResponse;
+import Library.Project.dto.response.OrderResponse.OrderInforResponse;
 import Library.Project.constant.enums.OrderStatus;
 import Library.Project.entity.Orders;
 

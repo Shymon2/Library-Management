@@ -1,11 +1,11 @@
 package Library.Project.controller;
 
 import Library.Project.configuration.Translator;
-import Library.Project.dto.Response.ApiResponse.PageResponse;
+import Library.Project.dto.response.ApiResponse.PageResponse;
 import Library.Project.entity.User;
-import Library.Project.dto.Request.User.UpdateUserDTO;
-import Library.Project.dto.Request.User.UserDTO;
-import Library.Project.dto.Response.UserResponse.UserInforResponse;
+import Library.Project.dto.request.User.UpdateUserDTO;
+import Library.Project.dto.request.User.UserDTO;
+import Library.Project.dto.response.UserResponse.UserInforResponse;
 import Library.Project.service.interfaces.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
